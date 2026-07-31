@@ -10,7 +10,7 @@ requires-python = "==3.11.15"
 dependencies = [
   "jsonschema>=4,<5",
   "rfc8785==0.1.4",
-  "ruamel.yaml>=0.18,<0.19",
+  "ruamel.yaml>=0.18,<0.20",
 ]
 
 [project.optional-dependencies]
