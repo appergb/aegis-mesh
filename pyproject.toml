@@ -30,7 +30,7 @@ Repository = "https://github.com/appergb/aegis-mesh"
 Issues = "https://github.com/appergb/aegis-mesh/issues"
 
 [build-system]
-requires = ["setuptools>=75,<81"]
+requires = ["setuptools>=75,<84"]
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
