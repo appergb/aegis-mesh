@@ -1,0 +1,23 @@
+title: Aegis Mesh Synthetic Broad Script Host Test
+id: 123e4567-e89b-42d3-a456-426614174021
+status: test
+description: Intentionally broad package-test rule that must fail the negative fixture gate.
+author: Aegis Mesh Detection Engineering
+date: '2026-07-30'
+modified: '2026-07-30'
+references:
+  - https://example.invalid/aegis-mesh/synthetic-high-fp
+tags:
+  - attack.execution
+  - attack.t1059.007
+logsource:
+  category: process_creation
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    Image|endswith: '\wscript.exe'
+  condition: selection
+falsepositives:
+  - Legitimate script-host maintenance, demonstrated by the negative fixture.
+level: low

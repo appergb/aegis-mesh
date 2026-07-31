@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:threat-model:1.0.0",
+  "title": "Aegis Mesh DFD and STRIDE threat model",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "model_id", "created_at", "status", "system", "entities", "processes", "data_stores", "data_flows", "trust_boundaries", "assets", "data_classifications", "calling_identities", "controls", "threats"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "model_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "created_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "status": {"enum": ["incomplete", "complete"]},
+    "system": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "entities": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/element"}},
+    "processes": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/element"}},
+    "data_stores": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/element"}},
+    "data_flows": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/dataFlow"}},
+    "trust_boundaries": {"$ref": "#/$defs/contextIdList"},
+    "assets": {"$ref": "#/$defs/contextIdList"},
+    "data_classifications": {"$ref": "#/$defs/contextIdList"},
+    "calling_identities": {"$ref": "#/$defs/contextIdList"},
+    "controls": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/control"}},
+    "threats": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/threat"}},
+    "missing_inputs": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/textList"}
+  },
+  "$defs": {
+    "contextIdList": {
+      "type": "array", "maxItems": 100, "uniqueItems": true,
+      "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"}
+    },
+    "element": {
+      "type": "object", "additionalProperties": false, "required": ["element_id", "name", "description"],
+      "properties": {
+        "element_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "name": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "description": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"}
+      }
+    },
+    "dataFlow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["flow_id", "source_element_id", "destination_element_id", "data_classification", "trust_boundaries"],
+      "properties": {
+        "flow_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "source_element_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "destination_element_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "data_classification": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "trust_boundaries": {"$ref": "#/$defs/contextIdList"}
+      }
+    },
+    "control": {
+      "type": "object", "additionalProperties": false, "required": ["control_id", "element_ids", "description"],
+      "properties": {
+        "control_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "element_ids": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"},
+        "description": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"}
+      }
+    },
+    "threat": {
+      "type": "object", "additionalProperties": false,
+      "required": ["threat_id", "element_id", "category", "description", "disposition", "mitigations"],
+      "properties": {
+        "threat_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "element_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "category": {"enum": ["spoofing", "tampering", "repudiation", "information_disclosure", "denial_of_service", "elevation_of_privilege"]},
+        "description": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"},
+        "disposition": {"enum": ["mitigated", "accepted", "not_applicable", "deferred"]},
+        "mitigations": {"type": "array", "minItems": 1, "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"}}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "complete"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "entities": {"minItems": 1}, "processes": {"minItems": 1}, "data_stores": {"minItems": 1},
+          "data_flows": {"minItems": 1}, "trust_boundaries": {"minItems": 1}, "assets": {"minItems": 1}, "data_classifications": {"minItems": 1},
+          "calling_identities": {"minItems": 1}, "controls": {"minItems": 1},
+          "threats": {
+            "minItems": 6,
+            "items": {"properties": {"disposition": {"enum": ["mitigated", "accepted", "not_applicable"]}}},
+            "allOf": [
+              {"contains": {"properties": {"category": {"const": "spoofing"}}, "required": ["category"]}},
+              {"contains": {"properties": {"category": {"const": "tampering"}}, "required": ["category"]}},
+              {"contains": {"properties": {"category": {"const": "repudiation"}}, "required": ["category"]}},
+              {"contains": {"properties": {"category": {"const": "information_disclosure"}}, "required": ["category"]}},
+              {"contains": {"properties": {"category": {"const": "denial_of_service"}}, "required": ["category"]}},
+              {"contains": {"properties": {"category": {"const": "elevation_of_privilege"}}, "required": ["category"]}}
+            ]
+          }
+        },
+        "not": {"required": ["missing_inputs"]}
+      },
+      "else": {
+        "required": ["missing_inputs"],
+        "properties": {"missing_inputs": {"minItems": 1}}
+      }
+    }
+  ]
+}

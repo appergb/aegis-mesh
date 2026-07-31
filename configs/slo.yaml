@@ -1,0 +1,9 @@
+schema_version: 1.0.0
+services: []
+required_sli_fields: [query, definition, target, window, error_budget]
+missing_value_behavior: disabled
+production_gate:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true

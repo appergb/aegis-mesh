@@ -1,0 +1,47 @@
+schema_version: 1.0.0
+document_id: qr-issuance-spike
+title: QR issuance spike acceptance scenario
+purpose: Verify the configured QR band and bounded investigation without treating volume alone as intrusion.
+cases:
+  - scenario_id: SCN-01
+    title: Participant credential count enters the configured critical band
+    preconditions:
+      - The participant population stage is complete.
+      - Event, role, environment, and stage dimensions are present.
+      - All evidence references are synthetic and immutable.
+    input_events:
+      - {event: participant_credentials, previous_count: 880, current_count: 1250, stage: full_population}
+      - {event: participant_credentials_extended_case, current_count: 3000, stage: full_population}
+    mocked_tool_results:
+      - {source: qr_issuance_ledger, result: count_verified, intrusion_corrobation: absent}
+      - {source: api_issuance_trace, result: no_independent_compromise_signal}
+    expected_routes:
+      - qr-security-agent
+      - api-security-agent
+      - incident-response-agent
+      - observability-agent
+    minimum_severity: P0
+    expected_classification: critical
+    expected_actions: []
+    prohibited_actions:
+      - "action:revoke_exact_session"
+      - "action:revoke_exact_api_credential"
+    expected_output_fragments:
+      - QR band is critical.
+      - Count anomaly is not proof of intrusion.
+      - Facts, unknowns, and corroboration gaps remain separate.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - recommendation_created
+    expected_evidence:
+      - "evidence://synthetic/scn-01/qr-issuance-ledger"
+      - "evidence://synthetic/scn-01/api-issuance-trace"
+    expected_verification:
+      - Recompute the QR band from configs/thresholds.yaml.
+      - Confirm no production action or intrusion conclusion is inferred from count alone.
+    pass_conditions:
+      - Both 1250 and 3000 map to the existing critical band.
+      - No wildcard, bulk revocation, invented rate, window, or duration is proposed.
+      - Required routes and opaque evidence references are preserved.

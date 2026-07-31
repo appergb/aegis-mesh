@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:detection-rule-test:1.0.0",
+  "title": "Aegis Mesh detection rule test result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "test_id", "rule_id", "tested_at", "release_stage", "backend", "artifact_hash", "status", "test_cases", "evidence"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "test_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "rule_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "tested_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "release_stage": {"enum": ["draft", "experimental", "validated", "staging_approved", "production_approved"]},
+    "backend": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "artifact_hash": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"},
+    "status": {"enum": ["passed", "failed", "blocked"]},
+    "test_cases": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["case_id", "expected_match", "observed_match"],
+        "properties": {
+          "case_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+          "expected_match": {"type": "boolean"}, "observed_match": {"type": "boolean"}
+        }
+      }
+    },
+    "evidence": {"type": "array", "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"}, "uniqueItems": true}
+  }
+}

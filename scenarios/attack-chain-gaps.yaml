@@ -1,0 +1,50 @@
+schema_version: 1.0.0
+document_id: attack-chain-gaps
+title: Attack-chain gap handling acceptance scenario
+purpose: Verify that heterogeneous log analysis preserves parser, clock, and telemetry gaps instead of fabricating missing attack stages.
+cases:
+  - scenario_id: SCN-21
+    title: Cross-source chain remains partial when timing and telemetry are incomplete
+    preconditions:
+      - A formal incident and immutable synthetic Sysmon, Linux Auth, and Zeek evidence exist.
+      - Source timestamps retain their original timezone and clock metadata.
+      - The shared log-analysis skill has no production write capability.
+    input_events:
+      - {event: sysmon_process_observation, parser_status: complete, clock_status: suspected_skew}
+      - {event: linux_auth_observation, parser_status: partial, timezone: explicit}
+      - {event: zeek_network_observation, telemetry_gap: outbound_stage_missing}
+    mocked_tool_results:
+      - {source: normalized_timeline, result: partial_order_only, clock_skew_unresolved: true}
+      - {source: parser_diagnostics, result: partial_linux_auth_fields}
+      - {source: chain_correlator, result: incomplete_chain, fabricated_stages: []}
+    expected_routes:
+      - observability-agent
+      - incident-response-agent
+    minimum_severity: P1
+    expected_classification: suspicious
+    expected_actions:
+      - "action:query_internal_telemetry"
+    prohibited_actions:
+      - "action:change_broad_firewall_rule"
+    expected_output_fragments:
+      - The attack-chain gap remains explicit.
+      - Clock skew and timezone uncertainty remain explicit.
+      - Parser limitations and missing telemetry are reported as gaps.
+      - The attack chain is partial and no missing stage is fabricated.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - evidence_transformed
+      - recommendation_created
+    expected_evidence:
+      - "evidence://synthetic/scn-21/sysmon"
+      - "evidence://synthetic/scn-21/linux-auth"
+      - "evidence://synthetic/scn-21/zeek"
+      - "evidence://synthetic/scn-21/parser-diagnostics"
+    expected_verification:
+      - Recompute the partial timeline while preserving source clocks and provenance.
+      - Confirm every claimed chain edge is backed by source evidence.
+    pass_conditions:
+      - Unresolved ordering, parser, and telemetry gaps remain visible in the result.
+      - No fabricated event, identity, stage, or production action appears.

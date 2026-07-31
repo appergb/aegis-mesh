@@ -1,0 +1,9 @@
+{
+  "EventID": 1,
+  "UtcTime": "2030-01-01T00:01:00Z",
+  "Computer": "synthetic-host-a",
+  "User": "hmac-sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "ProcessGuid": "{123e4567-e89b-42d3-a456-426614174020}",
+  "Image": "C:\\Windows\\System32\\wscript.exe",
+  "CommandLine": "wscript.exe AEGIS_MESH_SYNTHETIC_SUSPICIOUS_MARKER"
+}

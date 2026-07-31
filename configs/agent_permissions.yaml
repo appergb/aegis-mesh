@@ -1,0 +1,51 @@
+schema_version: 1.0.0
+default_effect: deny
+agents:
+  - agent_id: main-security-orchestrator
+    maximum_permission: recommend
+    grants: [observe, recommend]
+    explicit_denials: [bypass_approval, execute_production_action, expand_tool_allowlist, disclose_secrets]
+  - agent_id: qr-security-agent
+    maximum_permission: execute_reversible
+    grants: [observe, recommend, execute_reversible]
+    explicit_denials: [bypass_approval, execute_high_impact, read_raw_secrets, expand_asset_scope]
+  - agent_id: ddos-defense-agent
+    maximum_permission: execute_reversible
+    grants: [observe, recommend, execute_reversible]
+    explicit_denials: [bypass_approval, execute_high_impact, attack_back, expand_asset_scope]
+  - agent_id: api-security-agent
+    maximum_permission: execute_reversible
+    grants: [observe, recommend, execute_reversible]
+    explicit_denials: [bypass_approval, execute_high_impact, read_bearer_tokens, expand_asset_scope]
+  - agent_id: infrastructure-agent
+    maximum_permission: execute_reversible
+    grants: [observe, recommend, execute_reversible]
+    explicit_denials: [bypass_approval, unapproved_dns_change, broad_firewall_change, read_raw_secrets]
+  - agent_id: kubernetes-agent
+    maximum_permission: execute_reversible
+    grants: [observe, recommend, execute_reversible]
+    explicit_denials: [bypass_approval, arbitrary_pod_shell, cluster_wide_delete, read_raw_secrets]
+  - agent_id: database-agent
+    maximum_permission: recommend
+    grants: [observe, recommend]
+    explicit_denials: [bypass_approval, automatic_failover, destructive_ddl, delete_data]
+  - agent_id: observability-agent
+    maximum_permission: observe
+    grants: [observe]
+    explicit_denials: [bypass_approval, recommend_unverified_action, execute_production_action, alter_evidence]
+  - agent_id: incident-response-agent
+    maximum_permission: execute_reversible
+    grants: [observe, recommend, execute_reversible]
+    explicit_denials: [bypass_approval, erase_timeline, self_verify_execution, disclose_unapproved_evidence]
+  - agent_id: disaster-recovery-agent
+    maximum_permission: execute_high_impact
+    grants: [observe, recommend, execute_reversible, execute_high_impact]
+    explicit_denials: [bypass_approval, invent_rto_rpo, overwrite_primary_data, skip_business_validation]
+  - agent_id: threat-intelligence-agent
+    maximum_permission: recommend
+    grants: [observe, recommend]
+    explicit_denials: [bypass_approval, active_scan, deanonymize_person, expand_ioc_scope]
+  - agent_id: abuse-notification-agent
+    maximum_permission: execute_high_impact
+    grants: [observe, recommend, execute_reversible, execute_high_impact]
+    explicit_denials: [bypass_approval, automatic_send, guessed_recipient, disclose_unapproved_evidence]

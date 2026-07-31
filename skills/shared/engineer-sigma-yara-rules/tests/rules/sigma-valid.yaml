@@ -1,0 +1,24 @@
+title: Aegis Mesh Synthetic Script Marker
+id: 123e4567-e89b-42d3-a456-426614174020
+status: experimental
+description: Detects a synthetic script-host marker used only by package tests.
+author: Aegis Mesh Detection Engineering
+date: '2026-07-30'
+modified: '2026-07-30'
+references:
+  - https://example.invalid/aegis-mesh/synthetic-script-marker
+tags:
+  - attack.execution
+  - attack.t1059.007
+logsource:
+  category: process_creation
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    Image|endswith: '\wscript.exe'
+    CommandLine|contains: AEGIS_MESH_SYNTHETIC_SUSPICIOUS_MARKER
+  condition: selection
+falsepositives:
+  - A synthetic administrative test intentionally using the same marker.
+level: medium

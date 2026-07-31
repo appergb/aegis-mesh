@@ -1,0 +1,37 @@
+[project]
+name = "aegis-mesh-agent"
+version = "0.1.0"
+description = "Framework-neutral defensive security agents, governance contracts, and validation tooling"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [{name = "Aegis Mesh Contributors"}]
+keywords = ["cybersecurity", "ai-agents", "incident-response", "security-automation"]
+requires-python = "==3.11.15"
+dependencies = [
+  "jsonschema>=4,<5",
+  "rfc8785==0.1.4",
+  "ruamel.yaml>=0.18,<0.19",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8,<10",
+]
+detection = [
+  "pySigma==1.4.0",
+  "pySigma-backend-elasticsearch==2.1.0",
+  "pySigma-pipeline-sysmon==2.0.0",
+  "yara-python==4.5.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/appergb/aegis-mesh"
+Repository = "https://github.com/appergb/aegis-mesh"
+Issues = "https://github.com/appergb/aegis-mesh/issues"
+
+[build-system]
+requires = ["setuptools>=75,<81"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

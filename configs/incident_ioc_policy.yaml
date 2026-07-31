@@ -1,0 +1,9 @@
+schema_version: 1.0.0
+default_effect: deny
+classifications: [observed, suspicious, likely-malicious, confirmed-malicious, false-positive, closed]
+types: [ip, domain, file_hash, public_url]
+providers: []
+required_fields: [incident_id, evidence_id, ioc_type, classification, expires_at, disclosure, channel]
+non_recursive: true
+third_party_result_expands_scope: false
+active_scanning_allowed: false

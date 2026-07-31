@@ -1,0 +1,146 @@
+schema_version: 1.0.0
+server_id: adeo-cti-mcp
+enabled: false
+candidate_only: true
+default_effect: deny
+gateway_only: true
+direct_upstream_connection: false
+upstream_code_copied: false
+query_schema: schemas/mcp-query-request.schema.json
+authorized_agents: [threat-intelligence-agent]
+inventory:
+  fixture: tests/fixtures/mcp/adeo-ba7c696-tools-list.json
+  reviewed_upstream_count: 36
+  future_fork_client_count: 8
+  exposure_mode: future_safe_fork_exact_allowlist
+  retained_tools:
+    - host-info
+    - dns-lookup
+    - reverse-dns
+    - domain-info
+    - search-host-count
+    - virustotal-file-analysis
+    - virustotal-ip-analysis
+    - virustotal-domain-analysis
+  physical_removal_required:
+    - hello
+    - search-host
+    - list-search-facets
+    - list-search-filters
+    - search-tokens
+    - list-ports
+    - list-protocols
+    - request-scan
+    - get-scan-status
+    - list-scans
+    - list-triggers
+    - create-alert
+    - get-alert-info
+    - delete-alert
+    - edit-alert
+    - list-alerts
+    - list-queries
+    - search-queries
+    - list-query-tags
+    - get-profile
+    - get-api-info
+    - get-billing
+    - get-http-headers
+    - get-my-ip
+    - virustotal-url-analysis
+    - virustotal-yara-rules
+    - current-date
+    - current-time
+upstream_capabilities:
+  reviewed_prompt_count: 14
+  reviewed_resource_count: 3
+  future_client_prompt_count: 0
+  future_client_resource_count: 0
+  physical_removal_required: true
+call_policy:
+  removed_tool: deny
+  unknown_tool: deny
+  unknown_argument: deny
+  unknown_server: deny
+  scope_mismatch: deny
+  inventory_drift: refuse_startup
+contracts:
+  shodan:
+    tools: [host-info, dns-lookup, reverse-dns, domain-info, search-host-count]
+    query_class: owned_asset
+    owned_asset_id_required: true
+    verified_exact_asset_match_required: true
+    active_scan_allowed: false
+    owned_asset_types_by_tool:
+      host-info: [ip]
+      dns-lookup: [domain]
+      reverse-dns: [ip]
+      domain-info: [domain]
+      search-host-count: [ip, cidr, domain]
+  search_host_count:
+    raw_query_allowed: false
+    gateway_ast_required: true
+    allowed_ast_nodes: [term, and]
+    forbidden_operators: [or, not, wildcard]
+  virustotal:
+    incident_ioc_evidence_contract:
+      required_request_field: evidence
+      required_exact_scope_field: evidence_id
+      binding: exact_scope.evidence_id == evidence.evidence_id
+    file:
+      tool: virustotal-file-analysis
+      query_class: incident_ioc
+      required_ioc_type: file_hash
+      file_upload_allowed: false
+    ip:
+      tool: virustotal-ip-analysis
+      allowed_query_classes: [incident_ioc, owned_asset]
+      required_ioc_type: ip
+      required_owned_asset_type: ip
+      verified_exact_asset_match_required: true
+    domain:
+      tool: virustotal-domain-analysis
+      allowed_query_classes: [incident_ioc, owned_asset]
+      required_ioc_type: domain
+      required_owned_asset_type: domain
+      verified_exact_asset_match_required: true
+    active_submission_allowed: false
+    private_url_allowed: false
+    customer_data_allowed: false
+independent_url_adapter:
+  name: vt-readonly-url-report
+  counted_in_upstream_inventory: false
+  enabled: false
+  specification: integrations/adeo-cti-mcp/vt-readonly-url-report.md
+credential_boundary:
+  key_in_argv_allowed: false
+  shodan_key_in_logged_url_allowed: false
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  credential_ref_examples: [secret://runtime/shodan-api-key, secret://runtime/virustotal-api-key]
+runtime_controls:
+  exact_egress:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  rate_limit:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  tls_verification_required: true
+  redaction_required: true
+  audit_required: true
+output_boundary:
+  third_party_results_are_untrusted: true
+  third_party_results_expand_scope: false
+  main_orchestrator_default: [summary, evidence_reference]
+approval:
+  class: policy_authorized_read
+  additional_human_approval_required: false
+production_gate:
+  enabled: false
+  status: blocked

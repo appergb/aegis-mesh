@@ -1,0 +1,2298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:action-request:1.0.0",
+  "title": "Aegis Mesh action request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "incident_id",
+    "created_at",
+    "expires_at",
+    "action_status",
+    "action_category",
+    "action_type",
+    "target",
+    "exact_scope",
+    "environment",
+    "expected_effect",
+    "risk",
+    "blast_radius",
+    "preconditions",
+    "reversible",
+    "timeout_seconds",
+    "approval_class",
+    "scope_hash",
+    "verification_query"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "request_id": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"
+    },
+    "incident_id": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"
+    },
+    "created_at": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+    },
+    "expires_at": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+    },
+    "action_status": {
+      "enum": [
+        "proposed",
+        "awaiting_approval",
+        "approved",
+        "rejected",
+        "executing",
+        "succeeded",
+        "failed",
+        "compensated",
+        "rolled_back"
+      ]
+    },
+    "action_category": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+    },
+    "action_type": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+    },
+    "target": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/target"
+    },
+    "exact_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "service": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "reason": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+        },
+        "event_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "match_rule_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "pattern_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "role": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "namespace": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "workload_name": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "service_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "mode_from": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "mode_to": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "certificate_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "new_version_ref": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "zone_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "from_region": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "to_region": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "rule_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "cluster_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "candidate_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "from_node": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "to_node": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "backup_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "destination_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "migration_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "record_set_ref": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "runbook_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "drill_id": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "backend": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "recipient_ref": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "purpose": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+        },
+        "route_ids": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "principal_classes": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "credential_ids": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "endpoint_ids": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "principal_ids": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "session_ids": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "schema_objects": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "query_ids": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "fields": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "destinations": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/idList"
+        },
+        "severity": {
+          "enum": [
+            "P0",
+            "P1",
+            "P2",
+            "P3"
+          ]
+        },
+        "environment": {
+          "enum": [
+            "development",
+            "test",
+            "staging",
+            "production"
+          ]
+        },
+        "from_status": {
+          "enum": [
+            "detected",
+            "triaged",
+            "investigating",
+            "mitigating",
+            "monitoring",
+            "recovered",
+            "resolved",
+            "reviewed"
+          ]
+        },
+        "to_status": {
+          "enum": [
+            "detected",
+            "triaged",
+            "investigating",
+            "mitigating",
+            "monitoring",
+            "recovered",
+            "resolved",
+            "reviewed"
+          ]
+        },
+        "timestamp": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"
+          }
+        },
+        "duration_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "window_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "rate": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        },
+        "credential_classes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "participant",
+              "staff",
+              "media",
+              "visitor",
+              "test"
+            ]
+          }
+        },
+        "replicas": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "max_unavailable": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "rollout_strategy": {
+          "enum": [
+            "rolling_restart",
+            "rollout_restart",
+            "canary"
+          ]
+        },
+        "activation_window": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "end"
+          ],
+          "properties": {
+            "start": {
+              "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+            },
+            "end": {
+              "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+            }
+          }
+        },
+        "current_nameservers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "hostname"
+          }
+        },
+        "desired_nameservers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "hostname"
+          }
+        },
+        "ttl": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 86400
+        },
+        "percentage": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "source_cidrs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 64
+          }
+        },
+        "ports": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535
+          }
+        },
+        "expected_data_loss": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "seconds",
+            "records",
+            "bytes"
+          ],
+          "properties": {
+            "seconds": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 86400
+            },
+            "records": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "bytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "restore_point": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+        },
+        "compatibility_mode": {
+          "enum": [
+            "backward_compatible",
+            "expand_contract",
+            "read_only_migration"
+          ]
+        },
+        "legal_basis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "deletion_method": {
+          "enum": [
+            "cryptographic_erasure",
+            "secure_delete",
+            "provider_verified_delete"
+          ]
+        },
+        "dependency_snapshot": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"
+        },
+        "consistency_checkpoint": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"
+        },
+        "isolation_evidence": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"
+        },
+        "abort_thresholds": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "metric_id",
+              "operator",
+              "value",
+              "unit"
+            ],
+            "properties": {
+              "metric_id": {
+                "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+              },
+              "operator": {
+                "enum": [
+                  "gt",
+                  "gte",
+                  "lt",
+                  "lte"
+                ]
+              },
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+              }
+            }
+          }
+        },
+        "release_stage": {
+          "enum": [
+            "draft",
+            "experimental",
+            "validated",
+            "staging_approved",
+            "production_approved"
+          ]
+        },
+        "artifact_hash": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"
+        },
+        "expiry": {
+          "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"
+        },
+        "current_state": {
+          "enum": [
+            "enabled",
+            "disabled"
+          ]
+        },
+        "desired_state": {
+          "enum": [
+            "enabled",
+            "disabled"
+          ]
+        },
+        "retention_basis": {
+          "enum": [
+            "retention_expired",
+            "legal_authorized_deletion",
+            "data_subject_request"
+          ]
+        },
+        "degradation_mode": {
+          "enum": [
+            "cache_only",
+            "queue",
+            "read_only",
+            "static_fallback",
+            "disabled_non_core"
+          ]
+        }
+      }
+    },
+    "environment": {
+      "enum": [
+        "development",
+        "test",
+        "staging",
+        "production"
+      ]
+    },
+    "expected_effect": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+    },
+    "risk": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+    },
+    "blast_radius": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+    },
+    "preconditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+      }
+    },
+    "reversible": {
+      "type": "boolean"
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    },
+    "approval_class": {
+      "enum": [
+        "preauthorized_reversible",
+        "two_person_reversible",
+        "two_person_high_impact",
+        "two_person_irreversible"
+      ]
+    },
+    "approval": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/approval"
+    },
+    "scope_hash": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"
+    },
+    "verification_query": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+    },
+    "rollback_trigger": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+    },
+    "rollback_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+      }
+    },
+    "rollback_timeout_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    },
+    "rollback_verification_query": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"
+    },
+    "irreversibility_reason": {
+      "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+    },
+    "compensating_actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+      }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "action_category": {
+              "const": "incident_control"
+            },
+            "action_type": {
+              "const": "create_incident"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "incident"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "severity",
+                "service",
+                "environment"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "severity",
+                  "service",
+                  "environment"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "preauthorized_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "preauthorized_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "incident_control"
+            },
+            "action_type": {
+              "const": "update_incident_status"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "incident"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "from_status",
+                "to_status",
+                "reason"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "from_status",
+                  "to_status",
+                  "reason"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "preauthorized_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "preauthorized_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "incident_control"
+            },
+            "action_type": {
+              "const": "append_timeline_event"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "incident"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "event_id",
+                "timestamp",
+                "evidence_ids"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "event_id",
+                  "timestamp",
+                  "evidence_ids"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "preauthorized_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "preauthorized_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "edge_protection"
+            },
+            "action_type": {
+              "const": "apply_waf_challenge"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "edge_policy"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "route_ids",
+                "match_rule_id",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "route_ids",
+                  "match_rule_id",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "edge_protection"
+            },
+            "action_type": {
+              "const": "apply_edge_rate_limit"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "edge_policy"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "route_ids",
+                "principal_classes",
+                "rate",
+                "window_seconds",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "route_ids",
+                  "principal_classes",
+                  "rate",
+                  "window_seconds",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 5,
+              "maxProperties": 5
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "edge_protection"
+            },
+            "action_type": {
+              "const": "block_exact_invalid_pattern"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "edge_policy"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "pattern_id",
+                "route_ids",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "pattern_id",
+                  "route_ids",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "edge_protection"
+            },
+            "action_type": {
+              "const": "degrade_non_core_route"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "service_route"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "route_ids",
+                "degradation_mode",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "route_ids",
+                  "degradation_mode",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "identity_session_control"
+            },
+            "action_type": {
+              "const": "throttle_qr_issuance"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "qr_event"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "event_id",
+                "role",
+                "rate",
+                "window_seconds",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "event_id",
+                  "role",
+                  "rate",
+                  "window_seconds",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 5,
+              "maxProperties": 5
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "identity_session_control"
+            },
+            "action_type": {
+              "const": "force_server_qr_verification"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "qr_event"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "event_id",
+                "credential_classes",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "event_id",
+                  "credential_classes",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "identity_session_control"
+            },
+            "action_type": {
+              "const": "revoke_exact_credentials"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "credential_set"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "credential_ids",
+                "reason"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "credential_ids",
+                  "reason"
+                ]
+              },
+              "minProperties": 2,
+              "maxProperties": 2
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "identity_session_control"
+            },
+            "action_type": {
+              "const": "apply_endpoint_rate_limit"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "api_endpoint"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "endpoint_ids",
+                "principal_ids",
+                "rate",
+                "window_seconds",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "endpoint_ids",
+                  "principal_ids",
+                  "rate",
+                  "window_seconds",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 5,
+              "maxProperties": 5
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "identity_session_control"
+            },
+            "action_type": {
+              "const": "revoke_exact_session"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "session_set"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "session_ids",
+                "reason"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "session_ids",
+                  "reason"
+                ]
+              },
+              "minProperties": 2,
+              "maxProperties": 2
+            },
+            "approval_class": {
+              "const": "two_person_irreversible"
+            },
+            "reversible": {
+              "const": false
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_irreversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "identity_session_control"
+            },
+            "action_type": {
+              "const": "revoke_exact_api_credential"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "api_credential_set"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "credential_ids",
+                "reason"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "credential_ids",
+                  "reason"
+                ]
+              },
+              "minProperties": 2,
+              "maxProperties": 2
+            },
+            "approval_class": {
+              "const": "two_person_irreversible"
+            },
+            "reversible": {
+              "const": false
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_irreversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "compute_recovery"
+            },
+            "action_type": {
+              "const": "scale_exact_workload"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "workload"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "namespace",
+                "workload_name",
+                "replicas",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "namespace",
+                  "workload_name",
+                  "replicas",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "compute_recovery"
+            },
+            "action_type": {
+              "const": "restart_exact_workload"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "workload"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "namespace",
+                "workload_name",
+                "rollout_strategy",
+                "max_unavailable"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "namespace",
+                  "workload_name",
+                  "rollout_strategy",
+                  "max_unavailable"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "compute_recovery"
+            },
+            "action_type": {
+              "const": "shift_queue_or_cache_mode"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "service_dependency"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "service_id",
+                "mode_from",
+                "mode_to",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "service_id",
+                  "mode_from",
+                  "mode_to",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "infrastructure_change"
+            },
+            "action_type": {
+              "const": "replace_certificate"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "certificate"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "certificate_id",
+                "new_version_ref",
+                "activation_window"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "certificate_id",
+                  "new_version_ref",
+                  "activation_window"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "infrastructure_change"
+            },
+            "action_type": {
+              "const": "change_dns_authority"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "dns_zone"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "zone_id",
+                "current_nameservers",
+                "desired_nameservers",
+                "ttl"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "zone_id",
+                  "current_nameservers",
+                  "desired_nameservers",
+                  "ttl"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "infrastructure_change"
+            },
+            "action_type": {
+              "const": "shift_regional_traffic"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "traffic_policy"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "from_region",
+                "to_region",
+                "percentage",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "from_region",
+                  "to_region",
+                  "percentage",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "infrastructure_change"
+            },
+            "action_type": {
+              "const": "change_broad_firewall_rule"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "firewall_policy"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "rule_id",
+                "source_cidrs",
+                "destinations",
+                "ports",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "rule_id",
+                  "source_cidrs",
+                  "destinations",
+                  "ports",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 5,
+              "maxProperties": 5
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "database_recovery"
+            },
+            "action_type": {
+              "const": "promote_database_primary"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "database_cluster"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "cluster_id",
+                "candidate_id",
+                "expected_data_loss"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "cluster_id",
+                  "candidate_id",
+                  "expected_data_loss"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "database_recovery"
+            },
+            "action_type": {
+              "const": "failover_database"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "database_cluster"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "cluster_id",
+                "from_node",
+                "to_node",
+                "expected_data_loss"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "cluster_id",
+                  "from_node",
+                  "to_node",
+                  "expected_data_loss"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "database_recovery"
+            },
+            "action_type": {
+              "const": "restore_database"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "database"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "backup_id",
+                "restore_point",
+                "destination_id",
+                "expected_data_loss"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "backup_id",
+                  "restore_point",
+                  "destination_id",
+                  "expected_data_loss"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "database_recovery"
+            },
+            "action_type": {
+              "const": "change_database_schema"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "database"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "migration_id",
+                "schema_objects",
+                "compatibility_mode"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "migration_id",
+                  "schema_objects",
+                  "compatibility_mode"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "database_recovery"
+            },
+            "action_type": {
+              "const": "terminate_query_set"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "database"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "query_ids",
+                "session_ids",
+                "reason"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "query_ids",
+                  "session_ids",
+                  "reason"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_irreversible"
+            },
+            "reversible": {
+              "const": false
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_irreversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "database_recovery"
+            },
+            "action_type": {
+              "const": "delete_database_data"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "database"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "record_set_ref",
+                "legal_basis",
+                "deletion_method"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "record_set_ref",
+                  "legal_basis",
+                  "deletion_method"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_irreversible"
+            },
+            "reversible": {
+              "const": false
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_irreversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "disaster_recovery"
+            },
+            "action_type": {
+              "const": "execute_registered_failover"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "recovery_plan"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "runbook_id",
+                "from_region",
+                "to_region",
+                "dependency_snapshot"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "runbook_id",
+                  "from_region",
+                  "to_region",
+                  "dependency_snapshot"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "disaster_recovery"
+            },
+            "action_type": {
+              "const": "execute_registered_failback"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "recovery_plan"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "runbook_id",
+                "from_region",
+                "to_region",
+                "consistency_checkpoint"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "runbook_id",
+                  "from_region",
+                  "to_region",
+                  "consistency_checkpoint"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "disaster_recovery"
+            },
+            "action_type": {
+              "const": "run_isolated_dr_drill"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "recovery_drill"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "drill_id",
+                "environment",
+                "isolation_evidence",
+                "abort_thresholds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "drill_id",
+                  "environment",
+                  "isolation_evidence",
+                  "abort_thresholds"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "detection_release"
+            },
+            "action_type": {
+              "const": "release_detection_rule"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "detection_rule"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "rule_id",
+                "release_stage",
+                "backend",
+                "artifact_hash"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "rule_id",
+                  "release_stage",
+                  "backend",
+                  "artifact_hash"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "detection_release"
+            },
+            "action_type": {
+              "const": "disable_detection_rule"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "detection_rule"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "rule_id",
+                "reason",
+                "duration_seconds"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "rule_id",
+                  "reason",
+                  "duration_seconds"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_reversible"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_reversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "evidence_governance"
+            },
+            "action_type": {
+              "const": "export_evidence"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "evidence_set"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "evidence_ids",
+                "recipient_ref",
+                "fields",
+                "purpose",
+                "expiry"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "evidence_ids",
+                  "recipient_ref",
+                  "fields",
+                  "purpose",
+                  "expiry"
+                ]
+              },
+              "minProperties": 5,
+              "maxProperties": 5
+            },
+            "approval_class": {
+              "const": "two_person_irreversible"
+            },
+            "reversible": {
+              "const": false
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_irreversible"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "evidence_governance"
+            },
+            "action_type": {
+              "const": "change_legal_hold"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "legal_hold"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "evidence_ids",
+                "current_state",
+                "desired_state",
+                "legal_basis"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "evidence_ids",
+                  "current_state",
+                  "desired_state",
+                  "legal_basis"
+                ]
+              },
+              "minProperties": 4,
+              "maxProperties": 4
+            },
+            "approval_class": {
+              "const": "two_person_high_impact"
+            },
+            "reversible": {
+              "const": true
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_high_impact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "action_category": {
+              "const": "evidence_governance"
+            },
+            "action_type": {
+              "const": "delete_evidence"
+            },
+            "target": {
+              "properties": {
+                "resource_type": {
+                  "const": "evidence_set"
+                }
+              }
+            },
+            "exact_scope": {
+              "required": [
+                "evidence_ids",
+                "retention_basis",
+                "deletion_method"
+              ],
+              "propertyNames": {
+                "enum": [
+                  "evidence_ids",
+                  "retention_basis",
+                  "deletion_method"
+                ]
+              },
+              "minProperties": 3,
+              "maxProperties": 3
+            },
+            "approval_class": {
+              "const": "two_person_irreversible"
+            },
+            "reversible": {
+              "const": false
+            },
+            "approval": {
+              "properties": {
+                "approval_class": {
+                  "const": "two_person_irreversible"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "properties": {
+          "action_status": {
+            "enum": [
+              "approved",
+              "executing",
+              "succeeded",
+              "failed",
+              "compensated",
+              "rolled_back"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "approval"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_status": {
+            "enum": [
+              "proposed",
+              "awaiting_approval"
+            ]
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "approval"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "reversible": {
+            "const": true
+          }
+        },
+        "required": [
+          "reversible"
+        ]
+      },
+      "then": {
+        "required": [
+          "rollback_trigger",
+          "rollback_steps",
+          "rollback_timeout_seconds",
+          "rollback_verification_query"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "irreversibility_reason"
+              ]
+            },
+            {
+              "required": [
+                "compensating_actions"
+              ]
+            },
+            {
+              "required": [
+                "stop_conditions"
+              ]
+            }
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "irreversibility_reason",
+          "compensating_actions",
+          "stop_conditions"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "rollback_trigger"
+              ]
+            },
+            {
+              "required": [
+                "rollback_steps"
+              ]
+            },
+            {
+              "required": [
+                "rollback_timeout_seconds"
+              ]
+            },
+            {
+              "required": [
+                "rollback_verification_query"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

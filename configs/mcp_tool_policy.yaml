@@ -1,0 +1,20 @@
+schema_version: 1.0.0
+default_effect: deny
+servers: []
+global_gates:
+  enabled: false
+  pinned_commit_required: true
+  exact_tool_allowlist_required: true
+  exact_arguments_required: true
+  authentication_required: true
+  tls_verification_required: true
+  exact_egress_required: true
+  budget_required: true
+  redaction_required: true
+  audit_required: true
+  inventory_attestation_required: true
+  license_review_required: true
+  reproducible_artifact_required: true
+  live_conformance_required: true
+unknown_server_behavior: deny
+unknown_tool_behavior: deny

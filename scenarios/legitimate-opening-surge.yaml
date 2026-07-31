@@ -1,0 +1,45 @@
+schema_version: 1.0.0
+document_id: legitimate-opening-surge
+title: Legitimate opening surge acceptance scenario
+purpose: Distinguish healthy opening-time demand from DDoS without adding unconfigured thresholds.
+cases:
+  - scenario_id: SCN-02
+    title: Legitimate opening surge remains healthy demand
+    preconditions:
+      - The event opening stage is verified.
+      - Conversion, challenge, cache, origin, and authentication evidence is available.
+      - No production traffic control is pre-authorized by this fixture.
+    input_events:
+      - {event: opening_traffic_surge, stage: opening, traffic_direction: increased}
+    mocked_tool_results:
+      - {source: conversion, result: healthy}
+      - {source: edge_challenge, result: healthy}
+      - {source: cache_and_origin, result: healthy}
+      - {source: authentication_flow, result: healthy}
+    expected_routes:
+      - ddos-defense-agent
+      - observability-agent
+    minimum_severity: P3
+    expected_classification: false-positive
+    expected_actions: []
+    prohibited_actions:
+      - "action:apply_edge_rate_limit"
+      - "action:change_broad_firewall_rule"
+    expected_output_fragments:
+      - The surge is consistent with legitimate opening demand.
+      - Volume alone does not establish DDoS.
+      - Healthy business and origin evidence remains visible.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - recommendation_created
+    expected_evidence:
+      - "evidence://synthetic/scn-02/opening-schedule"
+      - "evidence://synthetic/scn-02/edge-origin-health"
+    expected_verification:
+      - Confirm the conclusion uses all supplied business and technical signals.
+      - Confirm no production mitigation is proposed or executed.
+    pass_conditions:
+      - No DDoS declaration, broad block, geography block, or active scan occurs.
+      - No numeric baseline, rate, window, or budget is invented.

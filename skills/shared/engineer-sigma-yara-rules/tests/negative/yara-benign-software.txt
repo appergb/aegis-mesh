@@ -1,0 +1,4 @@
+MZ
+AEGIS_MESH_SYNTHETIC_FORMAT
+AEGIS_MESH_SYNTHETIC_BENIGN_SOFTWARE
+This is a benign synthetic fixture for false-positive testing.

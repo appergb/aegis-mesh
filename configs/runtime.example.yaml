@@ -1,0 +1,50 @@
+schema_version: 1.0.0
+configured: false
+value: null
+unit: null
+required_before_production: true
+display_identity: Aegis Mesh
+adapters:
+  kimi:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    provider_model:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    api_secret_ref: secret://runtime/kimi-api-key
+  openai:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    provider_model:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    api_secret_ref: secret://runtime/openai-api-key
+  claude:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    provider_model:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    api_secret_ref: secret://runtime/claude-api-key
+resources:
+  gateway_endpoint: https://gateway.example.invalid
+  evidence_mount: /runtime/forensics/records
+  resource_aliases: []
+production_gate:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  blockers: [provider_model_missing, credentials_missing, production_endpoints_missing, live_mcp_conformance_missing]

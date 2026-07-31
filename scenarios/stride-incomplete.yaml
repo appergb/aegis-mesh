@@ -1,0 +1,42 @@
+schema_version: 1.0.0
+document_id: stride-incomplete
+title: Incomplete STRIDE model acceptance scenario
+purpose: Verify that missing DFD trust boundaries, calling identities, and data classifications remain explicit blockers to a complete threat model.
+cases:
+  - scenario_id: SCN-23
+    title: STRIDE incomplete result for a partial DFD
+    preconditions:
+      - A synthetic partial DFD and STRIDE worksheet exist.
+      - Threat-model completeness is evaluated against the existing shared-skill contract.
+      - No production architecture or identity facts may be inferred.
+    input_events:
+      - {event: threat_model_review, dfd_status: partial, trust_boundaries: missing, calling_identities: missing, data_classifications: missing}
+    mocked_tool_results:
+      - {source: dfd_validator, result: incomplete}
+      - {source: stride_coverage, result: incomplete_due_to_missing_context}
+    expected_routes:
+      - main-security-orchestrator
+    minimum_severity: P3
+    expected_classification: incomplete
+    expected_actions: []
+    prohibited_actions:
+      - "action:change_broad_firewall_rule"
+    expected_output_fragments:
+      - Trust boundaries are missing.
+      - Calling identities are missing.
+      - Data classifications are missing.
+      - The threat model remains incomplete.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - recommendation_created
+    expected_evidence:
+      - "evidence://synthetic/scn-23/partial-dfd"
+      - "evidence://synthetic/scn-23/stride-worksheet"
+    expected_verification:
+      - Confirm each missing field is reported without inferred replacement data.
+      - Confirm completeness cannot pass while any required context is absent.
+    pass_conditions:
+      - No complete or production-ready claim is emitted.
+      - Missing architecture facts produce one concise correction path, not repeated approvals.

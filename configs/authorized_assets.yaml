@@ -1,0 +1,10 @@
+schema_version: 1.0.0
+default_effect: deny
+assets:
+  ip: []
+  cidr: []
+  domain: []
+  lockfile: []
+required_registration_fields: [asset_id, owner, proof, approval_ref, expires_at, immutable_value]
+symlinks_allowed: false
+model_mutation_allowed: false

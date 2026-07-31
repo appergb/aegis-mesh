@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:mcp-query-request:1.0.0",
+  "title": "Aegis Mesh MCP query request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "incident_id", "created_at", "expires_at", "policy_status", "query_class", "requesting_agent", "action_category", "action_type", "target", "exact_scope", "environment", "tool_name", "query_name", "scope_hash", "approval_class"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "request_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "incident_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "created_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "expires_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "policy_status": {"enum": ["proposed", "authorized", "denied", "completed", "failed"]},
+    "query_class": {"enum": ["internal_security_telemetry", "owned_asset", "incident_ioc"]},
+    "requesting_agent": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "action_category": {"const": "security_query"},
+    "action_type": {"enum": ["query_internal_telemetry", "query_owned_asset_passive", "enrich_incident_ioc_passive"]},
+    "target": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/target"},
+    "exact_scope": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "incident_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+        "internal_resource_ref": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "owned_asset_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "evidence_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+        "query_name": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "time_window": {"$ref": "#/$defs/timeWindow"},
+        "result_limit": {"type": "integer", "minimum": 1, "maximum": 100},
+        "ioc_type": {"enum": ["ip", "domain", "file_hash", "public_url"]},
+        "expires_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+        "provider": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"}
+      }
+    },
+    "environment": {"enum": ["development", "test", "staging", "production"]},
+    "tool_name": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "query_name": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "internal_resource_ref": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "time_window": {"$ref": "#/$defs/timeWindow"},
+    "owned_asset_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "result_limit": {"type": "integer", "minimum": 1, "maximum": 100},
+    "ioc_type": {"enum": ["ip", "domain", "file_hash", "public_url"]},
+    "ioc_value": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "classification": {"enum": ["observed", "suspicious", "likely-malicious", "confirmed-malicious", "false-positive", "closed"]},
+    "provider": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "evidence": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"},
+    "scope_hash": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"},
+    "approval_class": {"const": "policy_authorized_read"},
+    "approval": {"allOf": [{"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/approval"}, {"properties": {"approval_class": {"const": "policy_authorized_read"}}}]}
+  },
+  "$defs": {
+    "timeWindow": {
+      "type": "object", "additionalProperties": false, "required": ["start", "end"],
+      "properties": {
+        "start": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+        "end": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"policy_status": {"enum": ["authorized", "completed", "failed"]}}},
+      "then": {"required": ["approval"]},
+      "else": {"not": {"required": ["approval"]}}
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "query_class": {"const": "internal_security_telemetry"}, "action_type": {"const": "query_internal_telemetry"},
+            "target": {"properties": {"resource_type": {"const": "telemetry_source"}}},
+            "exact_scope": {"required": ["incident_id", "internal_resource_ref", "query_name", "time_window"], "propertyNames": {"enum": ["incident_id", "internal_resource_ref", "query_name", "time_window"]}}
+          },
+          "required": ["internal_resource_ref", "time_window"],
+          "not": {"anyOf": [{"required": ["owned_asset_id"]}, {"required": ["result_limit"]}, {"required": ["ioc_type"]}, {"required": ["ioc_value"]}, {"required": ["classification"]}, {"required": ["provider"]}, {"required": ["evidence"]}]}
+        },
+        {
+          "properties": {
+            "query_class": {"const": "owned_asset"}, "action_type": {"const": "query_owned_asset_passive"},
+            "target": {"properties": {"resource_type": {"const": "owned_asset"}}},
+            "exact_scope": {"required": ["owned_asset_id", "query_name", "result_limit"], "propertyNames": {"enum": ["owned_asset_id", "query_name", "result_limit"]}}
+          },
+          "required": ["owned_asset_id", "result_limit"],
+          "not": {"anyOf": [{"required": ["internal_resource_ref"]}, {"required": ["time_window"]}, {"required": ["ioc_type"]}, {"required": ["ioc_value"]}, {"required": ["classification"]}, {"required": ["provider"]}, {"required": ["evidence"]}]}
+        },
+        {
+          "properties": {
+            "query_class": {"const": "incident_ioc"}, "action_type": {"const": "enrich_incident_ioc_passive"},
+            "target": {"properties": {"resource_type": {"const": "incident_ioc"}}},
+            "exact_scope": {"required": ["incident_id", "evidence_id", "ioc_type", "expires_at", "provider"], "propertyNames": {"enum": ["incident_id", "evidence_id", "ioc_type", "expires_at", "provider"]}}
+          },
+          "required": ["ioc_type", "ioc_value", "classification", "provider", "evidence"],
+          "not": {"anyOf": [{"required": ["internal_resource_ref"]}, {"required": ["time_window"]}, {"required": ["owned_asset_id"]}, {"required": ["result_limit"]}]}
+        }
+      ]
+    }
+  ]
+}

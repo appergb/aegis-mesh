@@ -1,0 +1,54 @@
+schema_version: 1.0.0
+document_id: region-failure
+title: Regional failure acceptance scenario
+purpose: Exercise the registered DR pre-switch gate without claiming an unconfigured production failover.
+cases:
+  - scenario_id: SCN-05
+    title: Primary region failure stops at the complete pre-switch gate
+    preconditions:
+      - A formal P0 incident and exact regional recovery plan reference exist.
+      - Standby, dependency, data consistency, approval, rollback, and verifier gates are evaluated.
+      - No real endpoint, credential, region, or recovery objective is configured.
+    input_events:
+      - {event: primary_region_unavailable, impact: core_service_unavailable}
+      - {event: standby_replication, state: delayed, data_loss: unknown}
+    mocked_tool_results:
+      - {source: standby_health, result: healthy}
+      - {source: dependency_snapshot, result: complete}
+      - {source: business_validation, result: pending}
+      - {source: high_impact_approval, result: missing}
+    expected_routes:
+      - disaster-recovery-agent
+      - infrastructure-agent
+      - database-agent
+      - observability-agent
+      - incident-response-agent
+    minimum_severity: P0
+    expected_classification: observed
+    expected_actions:
+      - "action:execute_registered_failover"
+    prohibited_actions:
+      - "action:shift_regional_traffic"
+      - "action:failover_database"
+      - "action:change_dns_authority"
+    expected_output_fragments:
+      - The request remains a blocked pre-switch draft.
+      - Standby delay and data-loss uncertainty are explicit.
+      - Existing two-person high-impact approval and independent verification are required.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - action_proposed
+      - production_gate_blocked
+    expected_evidence:
+      - "evidence://synthetic/scn-05/primary-region-health"
+      - "evidence://synthetic/scn-05/standby-health"
+      - "evidence://synthetic/scn-05/dependency-snapshot"
+    expected_verification:
+      - Confirm DR failover, infrastructure traffic shift, and database failover remain distinct action contracts.
+      - Confirm missing approval and business verification block execution.
+    pass_conditions:
+      - No switch, failover, DNS change, or database promotion is claimed.
+      - No approval layer is added and no existing approval is bypassed.
+      - No RTO, RPO, replication tolerance, data loss, or readiness value is invented.

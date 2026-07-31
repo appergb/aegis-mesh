@@ -1,0 +1,165 @@
+schema_version: 1.0.0
+server_id: wazuh-mcp
+enabled: false
+default_effect: deny
+gateway_only: true
+direct_upstream_connection: false
+query_class: internal_security_telemetry
+runtime_identity:
+  required_scope: wazuh:read
+  forbidden_scopes: [wazuh:write]
+authentication:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  allowed_modes: [bearer, oauth2]
+  credential_ref_example: secret://runtime/wazuh-mcp-token
+tls:
+  verify: true
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+AUTHLESS_ALLOW_WRITE: false
+inventory:
+  fixture: tests/fixtures/mcp/wazuh-v4.2.1-tools-list.json
+  reviewed_upstream_count: 48
+  live_upstream_count: 34
+  gateway_client_count: 34
+  exposure_mode: allowlist_only
+  allow_tools:
+    - get_wazuh_alerts
+    - get_wazuh_alert_summary
+    - analyze_alert_patterns
+    - get_wazuh_agents
+    - get_wazuh_running_agents
+    - check_agent_health
+    - get_agent_processes
+    - get_agent_ports
+    - get_agent_configuration
+    - get_wazuh_vulnerabilities
+    - get_wazuh_critical_vulnerabilities
+    - get_wazuh_vulnerability_summary
+    - search_security_events
+    - analyze_security_threat
+    - check_ioc_reputation
+    - perform_risk_assessment
+    - get_top_security_threats
+    - generate_security_report
+    - run_compliance_check
+    - get_wazuh_statistics
+    - get_wazuh_weekly_stats
+    - get_wazuh_cluster_health
+    - get_wazuh_cluster_nodes
+    - get_wazuh_rules_summary
+    - get_wazuh_remoted_stats
+    - get_wazuh_log_collector_stats
+    - search_wazuh_manager_logs
+    - get_wazuh_manager_error_logs
+    - validate_wazuh_connection
+    - wazuh_check_blocked_ip
+    - wazuh_check_agent_isolation
+    - wazuh_check_process
+    - wazuh_check_user_status
+    - wazuh_check_file_quarantine
+  deny_tools:
+    - wazuh_block_ip
+    - wazuh_isolate_host
+    - wazuh_kill_process
+    - wazuh_disable_user
+    - wazuh_quarantine_file
+    - wazuh_firewall_drop
+    - wazuh_host_deny
+    - wazuh_active_response
+    - wazuh_restart
+    - wazuh_unisolate_host
+    - wazuh_enable_user
+    - wazuh_restore_file
+    - wazuh_firewall_allow
+    - wazuh_host_allow
+call_policy:
+  denied_tool_source: inventory.deny_tools
+  denied_tool_effect: deny_and_audit
+  unknown_tool: deny
+  unknown_argument: deny
+  unknown_server: deny
+  scope_mismatch: deny
+  inventory_drift: refuse_startup
+tool_annotations:
+  readOnlyHint: true
+  destructiveHint: false
+  idempotentHint: true
+  openWorldHint: true
+request_contract:
+  schema: schemas/mcp-query-request.schema.json
+  required_query_class: internal_security_telemetry
+  formal_incident_required: true
+  internal_resource_ref_required: true
+  requesting_agent_required: true
+agent_tool_mapping:
+  observability-agent:
+    - get_wazuh_alerts
+    - get_wazuh_alert_summary
+    - analyze_alert_patterns
+    - search_security_events
+    - get_wazuh_statistics
+    - get_wazuh_weekly_stats
+    - get_wazuh_cluster_health
+    - get_wazuh_cluster_nodes
+    - get_wazuh_rules_summary
+    - get_wazuh_remoted_stats
+    - get_wazuh_log_collector_stats
+    - search_wazuh_manager_logs
+    - get_wazuh_manager_error_logs
+    - validate_wazuh_connection
+  threat-intelligence-agent:
+    - analyze_security_threat
+    - check_ioc_reputation
+    - get_top_security_threats
+  infrastructure-agent:
+    - get_wazuh_agents
+    - get_wazuh_running_agents
+    - check_agent_health
+    - get_agent_processes
+    - get_agent_ports
+    - get_agent_configuration
+    - wazuh_check_blocked_ip
+    - wazuh_check_agent_isolation
+    - wazuh_check_process
+    - wazuh_check_user_status
+    - wazuh_check_file_quarantine
+  kubernetes-agent:
+    - get_wazuh_vulnerabilities
+  database-agent:
+    - get_wazuh_critical_vulnerabilities
+    - get_wazuh_vulnerability_summary
+  incident-response-agent:
+    - perform_risk_assessment
+    - generate_security_report
+    - run_compliance_check
+main_orchestrator_delivery:
+  default_full_logs: false
+  allowed: [summaries, evidence_references]
+approval:
+  class: policy_authorized_read
+  additional_human_approval_required: false
+runtime_controls:
+  internal_only_network: true
+  exact_egress:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  rate_limit:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  redaction_required: true
+  audit_required: true
+  audit_fields: [caller_agent, incident_id, tool_name, normalized_target, policy_result, timestamp, status, disclosure_classification]
+  audit_excludes: [credentials, secret_values, full_logs]
+production_gate:
+  enabled: false
+  status: blocked

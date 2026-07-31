@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+enabled: false
+recipients: []
+channels: []
+templates: []
+trigger_requirements:
+  incident_required: true
+  evidence_required: true
+  classification_for_subject_contact: confirmed-malicious
+  classification_for_abuse_or_cert: likely-malicious
+approval_class: two_person_irreversible
+frequency:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+audit:
+  body_hash_required: true
+  idempotency_key_required: true
+  executor_event_required: true
+compensation:
+  retract_received_content_claim_allowed: false
+  actions: [stop_future_sends, separately_approve_correction, request_channel_recall, preserve_original_and_correction, escalate_privacy_incident]

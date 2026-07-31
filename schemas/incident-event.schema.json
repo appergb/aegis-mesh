@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:incident-event:1.0.0",
+  "title": "Aegis Mesh incident event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "incident_id", "event_id", "timestamp", "source_agent",
+    "target_agent", "service", "environment", "severity", "confidence", "status",
+    "summary", "facts", "hypotheses", "unknowns", "evidence", "recommended_actions",
+    "approval_required", "rollback_plan", "verification_plan", "correlation_id"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "incident_id": {"$ref": "#/$defs/uuid"},
+    "event_id": {"$ref": "#/$defs/uuid"},
+    "timestamp": {"$ref": "#/$defs/timestamp"},
+    "source_agent": {"$ref": "#/$defs/id"},
+    "target_agent": {"$ref": "#/$defs/id"},
+    "service": {"$ref": "#/$defs/id"},
+    "environment": {"enum": ["development", "test", "staging", "production"]},
+    "severity": {"enum": ["P0", "P1", "P2", "P3"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "status": {"enum": ["detected", "triaged", "investigating", "mitigating", "monitoring", "recovered", "resolved", "reviewed"]},
+    "summary": {"$ref": "#/$defs/nonEmptyText"},
+    "facts": {"$ref": "#/$defs/textList"},
+    "hypotheses": {"$ref": "#/$defs/textList"},
+    "unknowns": {"$ref": "#/$defs/textList"},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidenceReference"}, "uniqueItems": true},
+    "recommended_actions": {"type": "array", "items": {"$ref": "#/$defs/uuid"}, "uniqueItems": true},
+    "approval_required": {"type": "boolean"},
+    "rollback_plan": {"$ref": "#/$defs/nonEmptyText"},
+    "verification_plan": {"$ref": "#/$defs/nonEmptyText"},
+    "correlation_id": {"$ref": "#/$defs/uuid"}
+  },
+  "$defs": {
+    "uuid": {"type": "string", "format": "uuid"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"},
+    "nonEmptyText": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "textList": {"type": "array", "items": {"$ref": "#/$defs/nonEmptyText"}, "uniqueItems": true},
+    "idList": {"type": "array", "minItems": 1, "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource_type", "resource_id"],
+      "properties": {
+        "resource_type": {"$ref": "#/$defs/id"},
+        "resource_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "incident_id", "storage_ref", "content_hash", "collected_at", "storage_version"],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/uuid"},
+        "incident_id": {"$ref": "#/$defs/uuid"},
+        "storage_ref": {"type": "string", "pattern": "^evidence://[A-Za-z0-9][A-Za-z0-9._~-]*(?:/[A-Za-z0-9][A-Za-z0-9._~-]*)+$"},
+        "content_hash": {"$ref": "#/$defs/hash"},
+        "collected_at": {"$ref": "#/$defs/timestamp"},
+        "storage_version": {"$ref": "#/$defs/id"}
+      }
+    },
+    "humanApproval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approval_id", "approver_id", "approver_role", "approved_at", "scope_hash", "expires_at"],
+      "properties": {
+        "approval_id": {"$ref": "#/$defs/uuid"},
+        "approver_id": {"$ref": "#/$defs/id"},
+        "approver_role": {"enum": ["incident_commander", "service_owner", "infrastructure_owner", "database_owner", "legal_compliance_approver", "privacy_legal_approver", "detection_engineering_reviewer", "siem_edr_owner", "security_owner", "system_owner"]},
+        "approved_at": {"$ref": "#/$defs/timestamp"},
+        "scope_hash": {"$ref": "#/$defs/hash"},
+        "expires_at": {"$ref": "#/$defs/timestamp"}
+      }
+    },
+    "approval": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["approval_class", "policy_decision_id", "policy_id", "policy_version", "scope_hash", "decided_at", "expires_at", "audit_event_id"],
+          "properties": {
+            "approval_class": {"const": "policy_authorized_read"},
+            "policy_decision_id": {"$ref": "#/$defs/uuid"}, "policy_id": {"$ref": "#/$defs/id"},
+            "policy_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+            "scope_hash": {"$ref": "#/$defs/hash"}, "decided_at": {"$ref": "#/$defs/timestamp"},
+            "expires_at": {"$ref": "#/$defs/timestamp"}, "audit_event_id": {"$ref": "#/$defs/uuid"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["approval_class", "authorization_id", "policy_id", "policy_version", "authorized_role", "scope_hash", "immutable_config_hash", "approved_at", "expires_at", "audit_event_id"],
+          "properties": {
+            "approval_class": {"const": "preauthorized_reversible"},
+            "authorization_id": {"$ref": "#/$defs/uuid"}, "policy_id": {"$ref": "#/$defs/id"},
+            "policy_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+            "authorized_role": {"const": "incident_commander"}, "scope_hash": {"$ref": "#/$defs/hash"},
+            "immutable_config_hash": {"$ref": "#/$defs/hash"}, "approved_at": {"$ref": "#/$defs/timestamp"},
+            "expires_at": {"$ref": "#/$defs/timestamp"}, "audit_event_id": {"$ref": "#/$defs/uuid"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["approval_class", "human_approvals"],
+          "properties": {
+            "approval_class": {"enum": ["two_person_reversible", "two_person_high_impact", "two_person_irreversible"]},
+            "human_approvals": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/humanApproval"}}
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+schema_version: 1.0.0
+server_id: adeo-cti-mcp
+repository_url: https://github.com/ADEOSec/mcp-shodan
+requested_repository_url: null
+source_ref: ba7c6962c7bcb69964a44da9228cf5d43b7e7606
+source_commit: ba7c6962c7bcb69964a44da9228cf5d43b7e7606
+source_archive_sha256: sha256:fce173443e3de16aa2affa7a41f9a622928553072632d4f9b2d3db16686c507c
+tool_inventory_fixture: tests/fixtures/mcp/adeo-ba7c696-tools-list.json
+tool_inventory_sha256: sha256:becbe158659c3d318daca3c9f537053ebd0219ccf23ee44b2fd9ba183eac36d3
+observed_tool_count: 36
+license_status: unresolved
+license_evidence_ref: integrations/adeo-cti-mcp/INTEGRATION.md#license-evidence
+dependency_lock_ref: null
+dependency_lock_sha256: null
+sbom_ref: null
+sbom_sha256: null
+image_digest: null
+reviewed_at: "2026-07-30T00:00:00+08:00"
+reviewed_by: Aegis Mesh independent upstream review
+production_gate:
+  enabled: false
+  status: blocked
+  blocked_reasons:
+    - license_permission_unresolved
+    - safe_fork_missing
+    - credential_handling_fix_missing
+    - dependency_lock_inconsistent
+    - sbom_missing
+    - reproducible_artifact_missing
+    - live_removed_capabilities_attestation_missing
+    - gateway_conformance_missing
+    - upstream_interface_drift
+    - reviewed_image_digest_missing
+    - deployment_configuration_missing
+  required_live_attestations:
+    - safe_fork_tools_list_exact_8
+    - safe_fork_prompts_list_empty
+    - safe_fork_resources_list_empty
+    - removed_tools_call_rejected
+    - credential_redaction_conformance
+    - gateway_conformance

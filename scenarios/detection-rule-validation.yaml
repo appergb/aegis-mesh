@@ -1,0 +1,47 @@
+schema_version: 1.0.0
+document_id: detection-rule-validation
+title: Detection rule release-gate acceptance scenario
+purpose: Verify that syntax success cannot release a Sigma or YARA rule that fails a required negative fixture.
+cases:
+  - scenario_id: SCN-22
+    title: Syntactically valid rule remains experimental after negative-fixture failure
+    preconditions:
+      - A synthetic detection rule and immutable positive and negative fixtures exist.
+      - Rule publication is default-denied until every existing verification gate passes.
+      - No production detection backend is configured.
+    input_events:
+      - {event: detection_rule_candidate, rule_format: sigma_or_yara, release_stage: experimental}
+    mocked_tool_results:
+      - {source: syntax_validator, result: passed}
+      - {source: positive_fixture, result: expected_match}
+      - {source: negative_fixture, result: unexpected_match}
+      - {source: release_gate, result: denied}
+    expected_routes:
+      - observability-agent
+    minimum_severity: P3
+    expected_classification: experimental
+    expected_actions: []
+    prohibited_actions:
+      - "action:release_detection_rule"
+    expected_output_fragments:
+      - Syntax validation passed but the negative fixture failed.
+      - The negative fixture exposes a false positive.
+      - The rule remains experimental and is not releaseable.
+      - Fixture failure is recorded for correction and retest.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - verification_requested
+      - verification_failed
+      - policy_denied
+    expected_evidence:
+      - "evidence://synthetic/scn-22/detection-rule"
+      - "evidence://synthetic/scn-22/positive-fixture"
+      - "evidence://synthetic/scn-22/negative-fixture"
+    expected_verification:
+      - Re-run syntax, positive, and negative fixtures independently.
+      - Confirm release remains closed after any required fixture failure.
+    pass_conditions:
+      - The valid syntax result cannot override the failed negative fixture.
+      - Correction and retest require no new approval layer beyond the existing release gate.

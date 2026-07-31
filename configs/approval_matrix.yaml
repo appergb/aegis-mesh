@@ -1,0 +1,350 @@
+schema_version: 1.0.0
+default_effect: deny
+approval_classes:
+  - policy_authorized_read
+  - preauthorized_reversible
+  - two_person_reversible
+  - two_person_high_impact
+  - two_person_irreversible
+approver_roles:
+  - incident_commander
+  - service_owner
+  - infrastructure_owner
+  - database_owner
+  - legal_compliance_approver
+  - privacy_legal_approver
+  - detection_engineering_reviewer
+  - siem_edr_owner
+  - security_owner
+  - system_owner
+preauthorized_reversible:
+  enabled: false
+  trusted_config_required: true
+  immutable_config_hash:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  allowed_action_types:
+    - create_incident
+    - update_incident_status
+    - append_timeline_event
+  authorized_role: incident_commander
+  fallback: deny
+action_approvals:
+  - action_type: query_internal_telemetry
+    approval_class: policy_authorized_read
+    approver_roles: []
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: query_owned_asset_passive
+    approval_class: policy_authorized_read
+    approver_roles: []
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: enrich_incident_ioc_passive
+    approval_class: policy_authorized_read
+    approver_roles: []
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: create_incident
+    approval_class: preauthorized_reversible
+    approver_roles: []
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: update_incident_status
+    approval_class: preauthorized_reversible
+    approver_roles: []
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: append_timeline_event
+    approval_class: preauthorized_reversible
+    approver_roles: []
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: apply_waf_challenge
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: apply_edge_rate_limit
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: block_exact_invalid_pattern
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: degrade_non_core_route
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: throttle_qr_issuance
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: force_server_qr_verification
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: revoke_exact_credentials
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: apply_endpoint_rate_limit
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: revoke_exact_session
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: revoke_exact_api_credential
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: scale_exact_workload
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: restart_exact_workload
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: shift_queue_or_cache_mode
+    approval_class: two_person_reversible
+    approver_roles:
+      - incident_commander
+      - service_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: replace_certificate
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - infrastructure_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: change_dns_authority
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - infrastructure_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: shift_regional_traffic
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - infrastructure_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: change_broad_firewall_rule
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - infrastructure_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: promote_database_primary
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - database_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: failover_database
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - database_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: restore_database
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - database_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: change_database_schema
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - database_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: terminate_query_set
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - database_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: delete_database_data
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - database_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: execute_registered_failover
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - infrastructure_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: execute_registered_failback
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - infrastructure_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: run_isolated_dr_drill
+    approval_class: two_person_high_impact
+    approver_roles:
+      - security_owner
+      - system_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: release_detection_rule
+    approval_class: two_person_high_impact
+    approver_roles:
+      - detection_engineering_reviewer
+      - siem_edr_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: disable_detection_rule
+    approval_class: two_person_reversible
+    approver_roles:
+      - detection_engineering_reviewer
+      - siem_edr_owner
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: export_evidence
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - privacy_legal_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: change_legal_hold
+    approval_class: two_person_high_impact
+    approver_roles:
+      - incident_commander
+      - privacy_legal_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: delete_evidence
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - privacy_legal_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: send_abuse_notification
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - legal_compliance_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: send_cert_notification
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - legal_compliance_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: send_provider_abuse_report
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - legal_compliance_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false
+  - action_type: send_corrective_notification
+    approval_class: two_person_irreversible
+    approver_roles:
+      - incident_commander
+      - legal_compliance_approver
+    exact_scope_required: true
+    finite_expiry_required: true
+    wildcards_allowed: false

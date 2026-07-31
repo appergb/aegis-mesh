@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:ioc-enrichment-request:1.0.0",
+  "title": "Aegis Mesh passive IOC enrichment request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "incident_id", "created_at", "decision_status", "query_class", "ioc_type", "ioc_value", "classification", "expires_at", "provider", "evidence"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "request_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "incident_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "created_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "decision_status": {"enum": ["proposed", "authorized", "denied", "completed", "failed"]},
+    "query_class": {"const": "incident_ioc"},
+    "ioc_type": {"enum": ["ip", "domain", "file_hash", "public_url"]},
+    "ioc_value": {"type": "string", "minLength": 1, "maxLength": 2048},
+    "classification": {"enum": ["observed", "suspicious", "likely-malicious", "confirmed-malicious", "false-positive", "closed"]},
+    "expires_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "provider": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "evidence": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"}
+  }
+}

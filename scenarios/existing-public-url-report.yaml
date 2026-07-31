@@ -1,0 +1,47 @@
+schema_version: 1.0.0
+document_id: existing-public-url-report
+title: Existing public URL report acceptance scenario
+purpose: Verify sanitized GET-only retrieval of an existing report and explicit not-rated handling without URL submission.
+cases:
+  - scenario_id: SCN-17
+    title: Approved public URL uses only an existing sanitized report identifier
+    preconditions:
+      - A formal incident and approved public URL evidence reference exist.
+      - URL sensitivity validation passes and produces a sanitized provider identifier.
+      - URL submission remains unavailable.
+    input_events:
+      - {event: existing_public_url_report_request, url_class: approved_public, operation: get_existing_report}
+    mocked_tool_results:
+      - {source: url_disclosure_validator, result: approved, sanitized_identifier: present}
+      - {source: existing_report_get, branch: report_present, result: synthetic_reputation}
+      - {source: existing_report_get, branch: report_absent, result: not_rated}
+      - {source: submission_ledger, submissions: []}
+    expected_routes:
+      - threat-intelligence-agent
+    minimum_severity: P3
+    expected_classification: observed
+    expected_actions:
+      - "action:query_owned_asset_passive"
+    prohibited_actions:
+      - "mcp_tool:virustotal-url-analysis"
+    expected_output_fragments:
+      - Existing public URL handling is GET-only after validation.
+      - Only an existing report is retrieved with a sanitized identifier.
+      - An absent report is represented as not-rated, not as safe or malicious.
+      - No URL submission is attempted.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - mcp_query_started
+      - mcp_query_completed
+    expected_evidence:
+      - "evidence://synthetic/scn-17/public-url"
+      - "evidence://synthetic/scn-17/existing-report-result"
+      - "evidence://synthetic/scn-17/submission-ledger"
+    expected_verification:
+      - Exercise both report-present and report-absent mocked branches.
+      - Confirm the submission ledger remains empty in both branches.
+    pass_conditions:
+      - Existing data is retrieved by GET-only behavior after disclosure validation.
+      - Missing data remains not-rated and never triggers submission, retry, or scanning.

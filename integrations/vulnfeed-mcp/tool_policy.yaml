@@ -1,0 +1,171 @@
+schema_version: 1.0.0
+server_id: vulnfeed-mcp
+enabled: false
+default_effect: deny
+gateway_only: true
+direct_upstream_connection: false
+transport: stdio
+wrapper_implemented: false
+query_schema: schemas/mcp-query-request.schema.json
+inventory:
+  fixture: tests/fixtures/mcp/vulnfeed-aa2452d-tools-list.json
+  reviewed_upstream_count: 9
+  client_tool_count: 1
+  exposure_mode: allowlist_only
+  allow_tools: [scan_lockfile]
+  deny_tools:
+    - scan_project
+    - check_package
+    - lookup_cve
+    - monitor_project
+    - check_alerts
+    - update_deps
+    - list_monitored
+    - unmonitor_project
+call_policy:
+  denied_tool_effect: deny_and_audit
+  unknown_tool: deny
+  unknown_argument: deny
+  unknown_server: deny
+  scope_mismatch: deny
+  inventory_drift: refuse_startup
+request_contract:
+  schema: schemas/mcp-query-request.schema.json
+  required_query_class: owned_asset
+  required_asset_type: lockfile
+  owned_asset_id_required: true
+  incident_ioc_allowed: false
+  registry: configs/authorized_assets.yaml
+  required_registry_fields:
+    - asset_id
+    - owner
+    - proof
+    - approval_ref
+    - expires_at
+    - immutable_value
+    - expected_raw_sha256
+  registry_entry_must_be_unexpired: true
+  registry_owned_asset_id_exact_match_required: true
+  registry_asset_type_exact_match_required: true
+  registry_owner_verification_required: true
+  registry_proof_verification_required: true
+  registry_approval_ref_must_resolve_and_be_valid: true
+  immutable_value_semantics: approved_source_path
+  expected_raw_sha256_format: "sha256:<64 lowercase hex>"
+path_boundary:
+  one_file_per_invocation: true
+  copy_to_dedicated_isolated_directory: true
+  read_only_mount: true
+  canonical_path_required: true
+  symlinks_allowed: false
+  all_path_components_must_not_be_symlinks: true
+  regular_file_required: true
+  approved_source_root:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  canonical_path_must_be_within_approved_source_root: true
+  raw_byte_sha256_must_match_registry_before_copy: true
+  raw_byte_sha256_must_match_registry_after_copy: true
+  wrapper_injects_only_isolated_copy_path: true
+  repository_exposed: false
+  user_home_exposed: false
+  secret_paths_exposed: false
+  other_lockfiles_exposed: false
+  wrapper_implemented: false
+arguments:
+  scan_lockfile:
+    model_allowed: []
+    gateway_injected: [lockfile_path, show_all]
+    lockfile_path_source: registry_resolved_isolated_copy
+    show_all: true
+mock_path_decision_contract:
+  required_true:
+    - owned_asset_id_exact_match
+    - asset_type_is_lockfile
+    - owner_verified
+    - proof_verified
+    - approval_ref_valid
+    - registry_entry_unexpired
+    - canonical_path_within_approved_root
+    - source_is_not_symlink
+    - path_components_are_not_symlinks
+    - source_is_regular_file
+    - source_hash_matches_before_copy
+    - isolated_copy_hash_matches_after_copy
+  allow_only_when_all_true: true
+data_disclosure:
+  leaves_trust_boundary: [package_name, exact_version, ecosystem]
+  sbom_like_disclosure: true
+  original_lockfile_leaves_boundary: false
+  source_code_leaves_boundary: false
+  private_package_names_allowed: false
+  internal_project_names_allowed: false
+vendor_data_review:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  required_topics:
+    - retention
+    - tenant_isolation
+    - data_region
+    - dpa
+    - telemetry_training_use
+    - private_package_names
+    - backend_override_variables
+backend:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  https_required: true
+  model_mutation_allowed: false
+  upstream_override_variables_removed:
+    - VULNFEED_WORKER_URL
+    - WORKER_URL
+    - VULNFEED_TRANSPORT
+    - VULNFEED_API_KEY
+    - WORKER_BOOTSTRAP_KEY
+payment:
+  wallet_allowed: false
+  x402_allowed: false
+  payment_proxy_allowed: false
+  automatic_payment_allowed: false
+  http_402_effect: budget_alert_and_stop
+  payment_challenge_forwarded: false
+vulnerability_semantics:
+  show_all: true
+  required_fields:
+    - known_exploited
+    - known_exploited_source
+    - predicted_exploitation_probability
+    - epss_percentile
+    - epss_data_date
+  known_exploited_sources: [cisa_kev, verified_vendor_advisory]
+  epss_meaning: probability_of_public_cve_exploitation_in_next_30_days
+  epss_can_set_known_exploited: false
+output_boundary:
+  third_party_results_are_untrusted: true
+  third_party_results_can_expand_scope: false
+  fields_are_filtered_and_redacted: true
+approval:
+  class: policy_authorized_read
+  additional_human_approval_required: false
+runtime_controls:
+  exact_egress:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  rate_limit:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+  redaction_required: true
+  audit_required: true
+production_gate:
+  enabled: false
+  status: blocked

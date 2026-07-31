@@ -1,0 +1,4 @@
+MZ
+AEGIS_MESH_SYNTHETIC_FORMAT
+AEGIS_MESH_SYNTHETIC_SUSPICIOUS_MARKER
+This is synthetic text, not executable content.

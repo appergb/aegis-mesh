@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0.0",
+  "configured": false,
+  "value": null,
+  "unit": null,
+  "required_before_production": true,
+  "mcpServers": {
+    "wazuh": {
+      "enabled": false,
+      "gateway_only": true,
+      "direct_upstream_connection": false,
+      "transport": "streamable_http",
+      "url": "https://gateway.example.invalid/mcp/wazuh",
+      "tls_verify": true,
+      "scopes": ["wazuh:read"],
+      "forbidden_scopes": ["wazuh:write"],
+      "auth_mode": "bearer",
+      "AUTHLESS_ALLOW_WRITE": false,
+      "credential_ref": "secret://runtime/wazuh-mcp-token"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+schema_version: 1.0.0
+server_id: vulnfeed-mcp
+repository_url: https://github.com/novadyne-hq/vulnfeed-mcp
+requested_repository_url: https://github.com/infai-tech/vulnfeed-mcp
+source_ref: aa2452d724b29a6ee3e2bb68187c783ef2bb8847
+source_commit: aa2452d724b29a6ee3e2bb68187c783ef2bb8847
+source_archive_sha256: sha256:5ba594aca8be2878f36ab873eecae939d2c99c85240f52267828f292bcddbe4d
+tool_inventory_fixture: tests/fixtures/mcp/vulnfeed-aa2452d-tools-list.json
+tool_inventory_sha256: sha256:271a57239433563622c9b589cc3ffb32771d8862f4bc3ba399c4ca43eeadbdb3
+observed_tool_count: 9
+license_status: verified_mit
+license_evidence_ref: https://github.com/novadyne-hq/vulnfeed-mcp/blob/aa2452d724b29a6ee3e2bb68187c783ef2bb8847/LICENSE
+dependency_lock_ref: null
+dependency_lock_sha256: null
+sbom_ref: null
+sbom_sha256: null
+image_digest: null
+reviewed_at: "2026-07-30T00:00:00+08:00"
+reviewed_by: Aegis Mesh independent upstream review
+production_gate:
+  enabled: false
+  status: blocked
+  blocked_reasons:
+    - complete_dependency_lock_missing
+    - sbom_missing
+    - controlled_reproducible_build_missing
+    - reviewed_image_digest_missing
+    - isolated_readonly_wrapper_missing
+    - approved_root_hash_and_symlink_enforcement_missing
+    - show_all_override_enforcement_missing
+    - backend_override_hardening_missing
+    - vendor_data_review_missing
+    - payment_x402_disablement_attestation_missing
+    - live_tool_inventory_attestation_missing
+    - gateway_conformance_attestation_missing
+    - deployment_configuration_missing
+  required_live_attestations:
+    - live_upstream_tools_list_exact_9
+    - gateway_client_tools_list_exact_1
+    - eight_denied_tools_call_rejected
+    - scan_lockfile_show_all_true
+    - approved_lockfile_canonical_path_and_hash_match
+    - symlink_rejected
+    - wallet_and_x402_absent
+    - http_402_budget_alert_only
+    - approved_https_backend_exact_egress
+    - gateway_redaction_and_audit_conformance

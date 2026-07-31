@@ -1,0 +1,121 @@
+schema_version: 1.0.0
+registries:
+  agents:
+    - main-security-orchestrator
+    - qr-security-agent
+    - ddos-defense-agent
+    - api-security-agent
+    - infrastructure-agent
+    - kubernetes-agent
+    - database-agent
+    - observability-agent
+    - incident-response-agent
+    - disaster-recovery-agent
+    - threat-intelligence-agent
+    - abuse-notification-agent
+  severity: [P0, P1, P2, P3]
+  incident_status: [detected, triaged, investigating, mitigating, monitoring, recovered, resolved, reviewed]
+  permission: [observe, recommend, execute_reversible, execute_high_impact]
+  environment: [development, test, staging, production]
+  agent_result_status: [complete, partial, blocked, failed]
+  action_status: [proposed, awaiting_approval, approved, rejected, executing, succeeded, failed, compensated, rolled_back]
+  notification_status: [draft, awaiting_approval, approved, sent, failed, revoked]
+  normalized_parse_status: [parsed, partial, rejected]
+  threat_model_status: [incomplete, complete]
+  detection_release_stage: [draft, experimental, validated, staging_approved, production_approved]
+  ioc_decision_status: [proposed, authorized, denied, completed, failed]
+  mcp_policy_status: [proposed, authorized, denied, completed, failed]
+  query_class: [internal_security_telemetry, owned_asset, incident_ioc]
+  action_categories:
+    security_query:
+      - query_internal_telemetry
+      - query_owned_asset_passive
+      - enrich_incident_ioc_passive
+    incident_control:
+      - create_incident
+      - update_incident_status
+      - append_timeline_event
+    edge_protection:
+      - apply_waf_challenge
+      - apply_edge_rate_limit
+      - block_exact_invalid_pattern
+      - degrade_non_core_route
+    identity_session_control:
+      - throttle_qr_issuance
+      - force_server_qr_verification
+      - revoke_exact_credentials
+      - apply_endpoint_rate_limit
+      - revoke_exact_session
+      - revoke_exact_api_credential
+    compute_recovery:
+      - scale_exact_workload
+      - restart_exact_workload
+      - shift_queue_or_cache_mode
+    infrastructure_change:
+      - replace_certificate
+      - change_dns_authority
+      - shift_regional_traffic
+      - change_broad_firewall_rule
+    database_recovery:
+      - promote_database_primary
+      - failover_database
+      - restore_database
+      - change_database_schema
+      - terminate_query_set
+      - delete_database_data
+    disaster_recovery:
+      - execute_registered_failover
+      - execute_registered_failback
+      - run_isolated_dr_drill
+    detection_release:
+      - release_detection_rule
+      - disable_detection_rule
+    evidence_governance:
+      - export_evidence
+      - change_legal_hold
+      - delete_evidence
+    external_notification:
+      - send_abuse_notification
+      - send_cert_notification
+      - send_provider_abuse_report
+      - send_corrective_notification
+  audit_event:
+    - event_received
+    - event_validated
+    - route_selected
+    - recommendation_created
+    - policy_denied
+    - action_proposed
+    - approval_requested
+    - approval_granted
+    - approval_rejected
+    - action_authorized
+    - action_started
+    - action_succeeded
+    - action_failed
+    - rollback_started
+    - rollback_succeeded
+    - rollback_failed
+    - compensation_started
+    - compensation_completed
+    - verification_requested
+    - verification_succeeded
+    - verification_failed
+    - mcp_query_started
+    - mcp_query_completed
+    - mcp_query_failed
+    - notification_drafted
+    - notification_authorized
+    - notification_send_started
+    - notification_sent
+    - notification_failed
+    - notification_bounced
+    - notification_reply_received
+    - notification_authorization_revoked
+    - evidence_collected
+    - evidence_transformed
+    - evidence_accessed
+    - evidence_exported
+    - evidence_deleted
+    - legal_hold_changed
+    - production_gate_blocked

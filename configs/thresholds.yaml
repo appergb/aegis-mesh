@@ -1,0 +1,118 @@
+schema_version: 1.0.0
+qr:
+  full_population_stage_required: true
+  required_dimensions: [event, role, environment, stage]
+  participant_valid_credential_bands:
+    - {name: below_baseline, minimum: 0, maximum: 799}
+    - {name: normal, minimum: 800, maximum: 900}
+    - {name: warning, minimum: 901, maximum: 999}
+    - {name: high, minimum: 1000, maximum: 1199}
+    - {name: critical, minimum: 1200, maximum: null}
+  incomplete_stage_result: collecting
+  anomaly_is_proof_of_intrusion: false
+service_baselines:
+  traffic:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    expected_unit: requests_per_second
+    window:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    source:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    effective_at:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+  latency:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    expected_unit: milliseconds
+    window:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    source:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    effective_at:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+  error_rate:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    expected_unit: percent
+    window:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    source:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    effective_at:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+  resource_pressure:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    expected_unit: percent
+    window:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    source:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    effective_at:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+  database:
+    configured: false
+    value: null
+    unit: null
+    required_before_production: true
+    expected_unit: deployment_defined
+    window:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    source:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true
+    effective_at:
+      configured: false
+      value: null
+      unit: null
+      required_before_production: true

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "source_commit": "aa2452d724b29a6ee3e2bb68187c783ef2bb8847",
+  "tools": [
+    {"name": "scan_lockfile", "disposition": "allowed"},
+    {"name": "scan_project", "disposition": "denied"},
+    {"name": "check_package", "disposition": "denied"},
+    {"name": "lookup_cve", "disposition": "denied"},
+    {"name": "monitor_project", "disposition": "denied"},
+    {"name": "check_alerts", "disposition": "denied"},
+    {"name": "update_deps", "disposition": "denied"},
+    {"name": "list_monitored", "disposition": "denied"},
+    {"name": "unmonitor_project", "disposition": "denied"}
+  ]
+}

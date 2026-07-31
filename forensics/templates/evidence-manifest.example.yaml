@@ -1,0 +1,80 @@
+schema_version: 1.0.0
+manifest_id: 123e4567-e89b-42d3-a456-426614174011
+incident_id: 123e4567-e89b-42d3-a456-426614174000
+created_at: '2026-12-31T23:00:00Z'
+evidence_reference:
+  evidence_id: 123e4567-e89b-42d3-a456-426614174005
+  incident_id: 123e4567-e89b-42d3-a456-426614174000
+  storage_ref: evidence://synthetic-store/object/version-1
+  content_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  collected_at: '2026-12-31T23:00:00Z'
+  storage_version: version-1
+append_only: true
+storage_contract:
+  configured: false
+  provider: null
+  immutable_store_ref: null
+  production_gate: false
+retention:
+  configured: false
+  value: null
+  unit: null
+legal_hold:
+  state: disabled
+  approval_reference: null
+events:
+  - schema_version: 1.0.0
+    custody_event_id: 123e4567-e89b-42d3-a456-426614174012
+    incident_id: 123e4567-e89b-42d3-a456-426614174000
+    evidence_id: 123e4567-e89b-42d3-a456-426614174005
+    actor:
+      actor_id: observability-agent
+      actor_type: agent
+    timestamp: '2026-12-31T23:00:00Z'
+    action: collection
+    reason: Synthetic passive owned-asset telemetry example.
+    approval_reference: null
+    input_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    output_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    storage_ref: evidence://synthetic-store/object/version-1
+    storage_version: version-1
+    transformation_note: No transformation; synthetic example only.
+    previous_event_hash: null
+    event_hash: sha256:32214828174ba8753c82d2d98b7bdd6b42832d2ef460ed2c65b83326d781585d
+  - schema_version: 1.0.0
+    custody_event_id: 123e4567-e89b-42d3-a456-426614174013
+    incident_id: 123e4567-e89b-42d3-a456-426614174000
+    evidence_id: 123e4567-e89b-42d3-a456-426614174005
+    actor:
+      actor_id: threat-intelligence-agent
+      actor_type: agent
+    timestamp: '2026-12-31T23:02:00Z'
+    action: transform
+    reason: Derive the synthetic source fingerprint.
+    approval_reference: null
+    input_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    output_hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    storage_ref: evidence://synthetic-store/object/version-2
+    storage_version: version-2
+    transformation_note: Derived metadata only; raw bytes unchanged.
+    previous_event_hash: sha256:32214828174ba8753c82d2d98b7bdd6b42832d2ef460ed2c65b83326d781585d
+    event_hash: sha256:515aca54d2df7658848cb366d86c118d00cebe2587c109a72382ec55825f551f
+  - schema_version: 1.0.0
+    custody_event_id: 123e4567-e89b-42d3-a456-426614174014
+    incident_id: 123e4567-e89b-42d3-a456-426614174000
+    evidence_id: 123e4567-e89b-42d3-a456-426614174005
+    actor:
+      actor_id: incident-response-agent
+      actor_type: agent
+    timestamp: '2026-12-31T23:03:00Z'
+    action: access
+    reason: Correlate the synthetic evidence with the incident timeline.
+    approval_reference: null
+    input_hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    output_hash: sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+    storage_ref: evidence://synthetic-store/object/version-2
+    storage_version: version-2
+    transformation_note: No transformation; read-only synthetic access.
+    previous_event_hash: sha256:515aca54d2df7658848cb366d86c118d00cebe2587c109a72382ec55825f551f
+    event_hash: sha256:9d7f9fb8b5cfc4d5535f9937cc6804562d977d5a9224f3a844c60dce2ca1b1a7
+chain_head_hash: sha256:9d7f9fb8b5cfc4d5535f9937cc6804562d977d5a9224f3a844c60dce2ca1b1a7

@@ -1,0 +1,10 @@
+schema_version: 1.0.0
+default_effect: deny
+services: []
+required_contract: [service_id, dependencies, rto, rpo, failover, timeout, rollback, failback, business_verification]
+production_gate:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  blockers: [service_inventory_missing, rto_missing, rpo_missing, runbook_unverified, credentials_missing, production_endpoint_missing]

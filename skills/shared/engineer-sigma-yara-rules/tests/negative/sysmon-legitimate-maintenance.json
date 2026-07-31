@@ -1,0 +1,9 @@
+{
+  "EventID": 1,
+  "UtcTime": "2030-01-01T00:02:00Z",
+  "Computer": "synthetic-host-b",
+  "User": "hmac-sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "ProcessGuid": "{123e4567-e89b-42d3-a456-426614174021}",
+  "Image": "C:\\Windows\\System32\\wscript.exe",
+  "CommandLine": "wscript.exe AEGIS_MESH_SYNTHETIC_LEGITIMATE_MAINTENANCE"
+}

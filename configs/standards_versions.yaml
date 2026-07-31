@@ -1,0 +1,11 @@
+schema_version: 1.0.0
+standards:
+  mitre_attack: "19.1"
+  sigma_specification: 2.1.0
+  pysigma: 1.4.0
+  pysigma_backend_elasticsearch: 2.1.0
+  pysigma_pipeline_sysmon: 2.0.0
+  yara_language: "4.5"
+  yara_python: 4.5.4
+  json_schema: 2020-12
+upgrade_review_required: true

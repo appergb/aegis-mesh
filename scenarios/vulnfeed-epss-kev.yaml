@@ -1,0 +1,95 @@
+schema_version: 1.0.0
+document_id: vulnfeed-epss-kev
+title: VulnFeed EPSS and KEV prioritization acceptance scenarios
+purpose: Verify that predicted exploitation likelihood remains distinct from confirmed exploitation evidence during vulnerability prioritization.
+cases:
+  - scenario_id: SCN-19
+    title: High EPSS without KEV evidence remains predicted risk
+    preconditions:
+      - A formal incident and approved immutable synthetic lockfile exist.
+      - The dependency is mapped to an owned asset and active inventory record.
+      - Remediation is recommendation-only.
+    input_events:
+      - {event: dependency_finding, epss_band: high, kev_status: absent, vendor_exploitation_status: absent}
+    mocked_tool_results:
+      - {tool: scan_lockfile, result: finding_with_high_epss, percentile_and_date_present: true}
+      - {source: cisa_kev_snapshot, result: no_match}
+      - {source: vendor_advisory_snapshot, result: no_confirmed_exploitation}
+    expected_routes:
+      - threat-intelligence-agent
+    minimum_severity: P2
+    expected_classification: observed
+    expected_actions:
+      - "action:query_owned_asset_passive"
+      - "mcp_tool:scan_lockfile"
+    prohibited_actions:
+      - "mcp_tool:lookup_cve"
+      - "mcp_tool:update_deps"
+    expected_output_fragments:
+      - High EPSS is a time-bound prediction, not proof of exploitation.
+      - KEV and vendor-confirmed exploitation evidence are absent.
+      - The finding remains prioritized predicted risk.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - mcp_query_started
+      - mcp_query_completed
+      - evidence_transformed
+      - recommendation_created
+    expected_evidence:
+      - "evidence://synthetic/scn-19/lockfile"
+      - "evidence://synthetic/scn-19/epss-observation"
+      - "evidence://synthetic/scn-19/kev-snapshot"
+    expected_verification:
+      - Confirm the EPSS value retains its percentile and observation date.
+      - Confirm no known-exploited label is emitted without KEV or vendor evidence.
+    pass_conditions:
+      - Predicted exploitation likelihood and known exploitation remain separate fields.
+      - No dependency update, execution, payment, or automatic remediation occurs.
+
+  - scenario_id: SCN-20
+    title: KEV-confirmed core exposure can outrank a lower EPSS prediction
+    preconditions:
+      - A formal incident and approved immutable synthetic lockfile exist.
+      - The vulnerable dependency is confirmed in a core externally exposed service.
+      - Remediation is recommendation-only.
+    input_events:
+      - {event: dependency_finding, epss_band: low, kev_status: confirmed, asset_role: core, exposure: external}
+    mocked_tool_results:
+      - {tool: scan_lockfile, result: finding_with_low_epss, percentile_and_date_present: true}
+      - {source: cisa_kev_snapshot, result: confirmed_match, source_reference_present: true}
+      - {source: asset_inventory, result: core_external_exposure_confirmed}
+    expected_routes:
+      - threat-intelligence-agent
+      - incident-response-agent
+    minimum_severity: P1
+    expected_classification: likely-malicious
+    expected_actions:
+      - "action:query_owned_asset_passive"
+      - "mcp_tool:scan_lockfile"
+    prohibited_actions:
+      - "mcp_tool:lookup_cve"
+      - "mcp_tool:update_deps"
+    expected_output_fragments:
+      - KEV is retained as sourced known-exploitation evidence.
+      - Core service role and external exposure raise remediation priority.
+      - Lower EPSS does not erase confirmed exploitation evidence.
+    expected_audit_records:
+      - event_received
+      - event_validated
+      - route_selected
+      - mcp_query_started
+      - mcp_query_completed
+      - evidence_transformed
+      - recommendation_created
+    expected_evidence:
+      - "evidence://synthetic/scn-20/lockfile"
+      - "evidence://synthetic/scn-20/kev-snapshot"
+      - "evidence://synthetic/scn-20/asset-inventory"
+    expected_verification:
+      - Confirm KEV status retains its source reference and observation time.
+      - Confirm priority reflects exploitation evidence, asset role, and exposure together.
+    pass_conditions:
+      - The known-exploited core exposure outranks a prediction-only finding when evidence supports it.
+      - No automatic patch, update, payment, or production change occurs.

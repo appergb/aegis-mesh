@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:notification-request:1.0.0",
+  "title": "Aegis Mesh irreversible notification request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "notification_id", "incident_id", "created_at", "expires_at", "notification_status", "action_category", "action_type", "target", "exact_scope", "environment", "recipient_ref", "template_version", "body_hash", "redacted_facts", "evidence", "scope_hash", "approval_class", "reversible", "irreversibility_reason", "compensating_actions", "stop_conditions", "idempotency_key"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "notification_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "incident_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "created_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "expires_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "notification_status": {"enum": ["draft", "awaiting_approval", "approved", "sent", "failed", "revoked"]},
+    "action_category": {"const": "external_notification"},
+    "action_type": {"enum": ["send_abuse_notification", "send_cert_notification", "send_provider_abuse_report", "send_corrective_notification"]},
+    "target": {"allOf": [{"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/target"}, {"properties": {"resource_type": {"const": "notification_recipient"}}}]},
+    "exact_scope": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "notice_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+        "original_notice_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+        "recipient_ref": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+        "template_version": {"type": "string", "maxLength": 32, "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "body_hash": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"}
+      }
+    },
+    "environment": {"enum": ["development", "test", "staging", "production"]},
+    "recipient_ref": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "template_version": {"type": "string", "maxLength": 32, "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "body_hash": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"},
+    "redacted_facts": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/textList"},
+    "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"}, "uniqueItems": true},
+    "scope_hash": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"},
+    "approval_class": {"const": "two_person_irreversible"},
+    "approval": {"allOf": [{"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/approval"}, {"properties": {"approval_class": {"const": "two_person_irreversible"}}}]},
+    "reversible": {"const": false},
+    "irreversibility_reason": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"},
+    "compensating_actions": {"type": "array", "minItems": 1, "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"}},
+    "stop_conditions": {"type": "array", "minItems": 1, "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/nonEmptyText"}},
+    "idempotency_key": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"},
+    "original_notification_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"notification_status": {"enum": ["approved", "sent", "failed"]}}},
+      "then": {"required": ["approval"]}
+    },
+    {
+      "if": {"properties": {"notification_status": {"enum": ["draft", "awaiting_approval"]}}},
+      "then": {"not": {"required": ["approval"]}}
+    },
+    {
+      "if": {"properties": {"action_type": {"const": "send_corrective_notification"}}},
+      "then": {
+        "required": ["original_notification_id"],
+        "properties": {"exact_scope": {"required": ["notice_id", "original_notice_id", "recipient_ref", "template_version", "body_hash"]}}
+      },
+      "else": {
+        "not": {"required": ["original_notification_id"]},
+        "properties": {"exact_scope": {"required": ["notice_id", "recipient_ref", "template_version", "body_hash"], "not": {"required": ["original_notice_id"]}}}
+      }
+    }
+  ]
+}

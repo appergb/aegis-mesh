@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aegis-mesh:schema:normalized-security-event:1.0.0",
+  "title": "Aegis Mesh normalized security event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "observed_at", "normalized_at", "source", "event_type", "parse_status", "severity", "confidence", "raw_event_hash", "fields", "evidence"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "event_id": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/uuid"},
+    "observed_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "normalized_at": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/timestamp"},
+    "source": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "event_type": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/id"},
+    "parse_status": {"enum": ["parsed", "partial", "rejected"]},
+    "severity": {"enum": ["P0", "P1", "P2", "P3"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "raw_event_hash": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/hash"},
+    "fields": {"type": "object", "additionalProperties": {"type": ["string", "number", "integer", "boolean", "null"]}},
+    "evidence": {"type": "array", "items": {"$ref": "urn:aegis-mesh:schema:incident-event:1.0.0#/$defs/evidenceReference"}, "uniqueItems": true}
+  }
+}

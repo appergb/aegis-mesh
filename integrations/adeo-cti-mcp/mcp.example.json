@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "configured": false,
+  "value": null,
+  "unit": null,
+  "required_before_production": true,
+  "mcpServers": {
+    "adeo-cti": {
+      "enabled": false,
+      "candidate_only": true,
+      "gateway_only": true,
+      "direct_upstream_connection": false,
+      "transport": "streamable_http",
+      "url": "https://gateway.example.invalid/mcp/adeo-cti",
+      "tls_verify": true,
+      "auth_mode": "bearer",
+      "credential_ref": ["secret://runtime/shodan-api-key", "secret://runtime/virustotal-api-key"]
+    }
+  }
+}

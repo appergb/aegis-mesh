@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "configured": false,
+  "value": null,
+  "unit": null,
+  "required_before_production": true,
+  "mcpServers": {
+    "vulnfeed": {
+      "enabled": false,
+      "gateway_only": true,
+      "direct_upstream_connection": false,
+      "transport": "stdio",
+      "launcher": null,
+      "args": [],
+      "isolated_workdir": null,
+      "backend_url": null,
+      "backend_https_required": true,
+      "show_all": true,
+      "credential_ref": null,
+      "wallet": null,
+      "payment": null
+    }
+  }
+}

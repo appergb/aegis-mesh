@@ -1,0 +1,82 @@
+schema_version: 1.0.0
+fingerprint_id: 123e4567-e89b-42d3-a456-426614174010
+fingerprint_version: 1
+supersedes_fingerprint_hash: null
+fingerprint_hash: sha256:eceb8e9623efe7247731eab31fc53e8334de653566cd5ed2f718b4fd251f714b
+incident_id: 123e4567-e89b-42d3-a456-426614174000
+first_seen: '2026-12-31T23:00:00Z'
+last_seen: '2026-12-31T23:05:00Z'
+classification: suspicious
+confidence: 0.72
+supporting_evidence:
+  - evidence_id: 123e4567-e89b-42d3-a456-426614174005
+    incident_id: 123e4567-e89b-42d3-a456-426614174000
+    storage_ref: evidence://synthetic-store/object/version-1
+    content_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    collected_at: '2026-12-31T23:00:00Z'
+    storage_version: version-1
+contradicting_evidence: []
+source_ip: 198.51.100.24
+source_ip_basis:
+  method: direct_peer
+  trusted_proxy_ref: null
+  forwarded_chain_hops: 0
+source_port: 443
+asn: 64500
+network_prefix: 198.51.100.0/24
+network_org: Synthetic documentation network
+coarse_region:
+  country_code: ZZ
+  subdivision_code: null
+hosting_vpn_proxy_tor_signals:
+  hosting: unknown
+  vpn: unknown
+  proxy: not_observed
+  tor: not_observed
+reverse_dns:
+  hostname: null
+  queried_at: '2026-12-31T23:01:00Z'
+protocol: tcp
+tls_version: TLSv1.3
+cipher_suite: TLS_AES_128_GCM_SHA256
+ja3_ja4:
+  ja3: null
+  ja4: null
+transport_fingerprint:
+  kind: null
+  value: null
+pseudonymized_user_agent:
+  pseudonym_ref: hmac-sha256:1111111111111111111111111111111111111111111111111111111111111111
+  scheme: hmac-sha256
+  key_version: deployment-key-v1
+request_family: [registration.invalid-shape]
+rates:
+  count: 12
+  window_seconds: 300
+status_codes:
+  - status_code: 403
+    count: 12
+challenge_result: failed
+cdn_waf_trace_ids:
+  cdn: [synthetic-cdn-trace-01]
+  waf: [synthetic-waf-trace-01]
+pseudonymized_account_session_device:
+  account: null
+  session:
+    pseudonym_ref: hmac-sha256:2222222222222222222222222222222222222222222222222222222222222222
+    scheme: hmac-sha256
+    key_version: deployment-key-v1
+  device: null
+raw_evidence_ref:
+  evidence_id: 123e4567-e89b-42d3-a456-426614174005
+  incident_id: 123e4567-e89b-42d3-a456-426614174000
+  storage_ref: evidence://synthetic-store/object/version-1
+  content_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  collected_at: '2026-12-31T23:00:00Z'
+  storage_version: version-1
+content_hash: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+collected_by:
+  collector_id: observability-agent
+  collector_version: 1.0.0
+  collection_method: passive_owned_telemetry
+collected_at: '2026-12-31T23:00:00Z'

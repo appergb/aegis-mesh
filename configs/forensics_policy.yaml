@@ -1,0 +1,32 @@
+schema_version: 1.0.0
+classification_transitions:
+  observed: [suspicious, false-positive, closed]
+  suspicious: [likely-malicious, false-positive, closed]
+  likely-malicious: [confirmed-malicious, false-positive, closed]
+  confirmed-malicious: [false-positive, closed]
+  false-positive: [closed]
+  closed: []
+retention:
+  configured: false
+  value: null
+  unit: null
+  required_before_production: true
+  legal_review_required: true
+legal_hold:
+  default_state: disabled
+  change_requires_approval_class: two_person_high_impact
+  history_deletion_allowed: false
+rbac:
+  default_effect: deny
+  grants: []
+pseudonymization:
+  enabled: true
+  direct_identity_inference_allowed: false
+export:
+  default_effect: deny
+  approval_class: two_person_irreversible
+  minimum_fields_only: true
+delete:
+  default_effect: deny
+  approval_class: two_person_irreversible
+  provider_verification_required: true

@@ -1,0 +1,5 @@
+schema_version: 1.0.0
+default_effect: deny
+rules: []
+required_fields: [rule_id, signal, window, severity, confidence, deduplication, suppression, owner, runbook]
+missing_baseline_behavior: disabled
