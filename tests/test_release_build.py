@@ -55,7 +55,7 @@ def test_release_build_uses_only_git_tracked_files(tmp_path: Path) -> None:
         text=True,
         check=True,
     )
-    manifest = (candidate / "dist/aegis-mesh-0.1.0.manifest.json").read_text(encoding="utf-8")
+    manifest = (candidate / "dist/aegis-mesh-0.1.1.manifest.json").read_text(encoding="utf-8")
     assert ".env" not in manifest
     assert "pyproject.toml" in manifest
 
@@ -63,11 +63,11 @@ def test_release_build_uses_only_git_tracked_files(tmp_path: Path) -> None:
 def test_release_tag_must_exactly_match_project_version() -> None:
     script = ROOT / "scripts/check_release_tag.py"
     accepted = subprocess.run(
-        [sys.executable, str(script), "--tag", "v0.1.0"], capture_output=True, text=True
+        [sys.executable, str(script), "--tag", "v0.1.1"], capture_output=True, text=True
     )
     rejected = subprocess.run(
-        [sys.executable, str(script), "--tag", "v0.1.0-unreviewed"], capture_output=True, text=True
+        [sys.executable, str(script), "--tag", "v0.1.1-unreviewed"], capture_output=True, text=True
     )
     assert accepted.returncode == 0
     assert rejected.returncode != 0
-    assert "must be exactly v0.1.0" in rejected.stderr
+    assert "must be exactly v0.1.1" in rejected.stderr

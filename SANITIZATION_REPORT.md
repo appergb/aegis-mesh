@@ -4,11 +4,12 @@ Status: **PASS**
 
 ## Scope
 
-The entire public candidate tree was checked, excluding only `.git/` metadata and the local `.venv/` dependency environment. The private source tree and excluded generated media were not included in the candidate.
+The tracked public candidate and Git history were checked. Local `.git/` metadata, dependency environments, caches, and generated build artifacts are excluded by `.gitignore` and are not release inputs. The private source tree was not included in the candidate.
 
 ## Checks
 
 - Private-key, common cloud-token, GitHub-token, API-token, credential-in-URL, and JWT patterns: no live secret found.
+- A full-history `gitleaks` scan found no leak. The initial public release commit contained credential-shaped synthetic strings used only to prove leak rejection; current tests construct those sentinels without embedding credential-shaped literals.
 - Usernames, local home paths, private workspace names, and former project branding: no occurrence found.
 - Email addresses and personal contact records: none found.
 - Symbolic links: none found.
@@ -20,7 +21,7 @@ The entire public candidate tree was checked, excluding only `.git/` metadata an
 - No-Git release-build and untracked-sensitive-file sentinel tests: passed.
 - Non-example endpoints: only public documentation, standards, upstream source/license evidence, and project GitHub links are present.
 
-Strings such as `secret://`, `${RUNTIME_PASSWORD}`, `synthetic-value`, and `live-production-secret` occur only in symbolic configuration or negative tests that prove leakage is rejected. They are not usable credentials.
+Strings such as `secret://`, `${RUNTIME_PASSWORD}`, `synthetic-value`, and other test sentinels occur only in symbolic configuration or negative tests that prove leakage is rejected. They are not usable credentials.
 
 ## Release decision
 

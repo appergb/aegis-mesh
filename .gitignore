@@ -12,8 +12,17 @@ __pycache__/
 *.key
 *.p12
 *.pfx
+*.jks
+credentials.json
+service-account*.json
+.secrets/
+secrets/
+sessions/
 id_rsa*
 id_ed25519*
+node_modules/
+*.map
+.Codex/settings.json
 build/
 dist/
 *.egg-info/

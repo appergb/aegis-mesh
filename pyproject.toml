@@ -1,6 +1,6 @@
 [project]
 name = "aegis-mesh-agent"
-version = "0.1.0"
+version = "0.1.1"
 description = "Framework-neutral defensive security agents, governance contracts, and validation tooling"
 readme = "README.md"
 license = {file = "LICENSE"}

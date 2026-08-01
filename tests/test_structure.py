@@ -64,7 +64,7 @@ def test_general_architecture_documents_are_materialized() -> None:
 def test_project_metadata_and_direct_dependencies_are_locked() -> None:
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
     assert project["name"] == "aegis-mesh-agent"
-    assert project["version"] == "0.1.0"
+    assert project["version"] == "0.1.1"
     assert project["requires-python"] == "==3.11.15"
     assert set(project["dependencies"]) == {
         "jsonschema>=4,<5",

@@ -72,6 +72,10 @@ Aegis Mesh is defensive only. It prohibits hack-back, credential theft, persiste
 
 Contributions are welcome under the [contribution guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md). By contributing, you agree that your contribution is licensed under Apache-2.0.
 
+## Using with Codex
+
+Open the cloned repository in Codex and ask it to follow [AGENTS.md](AGENTS.md). That guide contains the exact setup, focused-test, validation, build, architecture, and configuration entry points. Codex operates on this source package only; it does not gain production credentials, network targets, or deployment authority from the repository.
+
 ## License
 
 Copyright 2026 Aegis Mesh Contributors. Licensed under the [Apache License 2.0](LICENSE).
