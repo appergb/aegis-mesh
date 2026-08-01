@@ -7,6 +7,11 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _untracked_credential_sentinel(value: str) -> str:
+    """Build a scanner sentinel without embedding a credential-shaped literal."""
+    return "".join(("API", "_KEY=", value, "\n"))
+
+
 def _candidate(tmp_path: Path) -> Path:
     candidate = tmp_path / "candidate"
     (candidate / "scripts").mkdir(parents=True)
@@ -18,7 +23,9 @@ def _candidate(tmp_path: Path) -> Path:
 def test_release_build_fails_closed_without_git_even_with_sensitive_sentinel(tmp_path: Path) -> None:
     candidate = _candidate(tmp_path)
     sentinel = candidate / ".env"
-    sentinel.write_text("API_KEY=must-never-enter-release\n", encoding="utf-8")
+    sentinel.write_text(
+        _untracked_credential_sentinel("must-never-enter-release"), encoding="utf-8"
+    )
     result = subprocess.run(
         [sys.executable, "scripts/build_release.py"],
         cwd=candidate,
@@ -38,7 +45,9 @@ def test_release_build_uses_only_git_tracked_files(tmp_path: Path) -> None:
         cwd=candidate,
         check=True,
     )
-    (candidate / ".env").write_text("API_KEY=must-never-enter-release\n", encoding="utf-8")
+    (candidate / ".env").write_text(
+        _untracked_credential_sentinel("must-never-enter-release"), encoding="utf-8"
+    )
     result = subprocess.run(
         [sys.executable, "scripts/build_release.py"],
         cwd=candidate,

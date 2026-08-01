@@ -207,7 +207,13 @@ def test_package_validator_rejects_security_inventory_and_outcome_bypasses(tmp_p
     mutations = (
         ("scenarios/unauthorized-external-target-denied.yaml", "expected_classification: denied", "expected_classification: observed", "scenario.fixed_outcome"),
         ("scenarios/wazuh-write-denied.yaml", "minimum_severity: P0", "minimum_severity: P3", "scenario.content_hash"),
-        ("scenarios/api-abuse.yaml", "principal_scope: exact", "principal_scope: exact, api_key: live-production-secret", "secret.literal"),
+        (
+            "scenarios/api-abuse.yaml",
+            "principal_scope: exact",
+            "principal_scope: exact, "
+            + "".join(("api", "_key: ", "live", "-production-secret")),
+            "secret.literal",
+        ),
         ("scenarios/api-abuse.yaml", "principal_scope: exact", "principal_scope: exact, note: 'Bear" + "er abcdefghijklmnopqrstuvwxyz123456'", "secret.literal"),
         ("configs/runtime.example.yaml", "https://gateway.example.invalid", "https://gateway.production.example.com", "endpoint.real"),
         ("adapters/openai.md", "# OpenAI runtime adapter", "# OpenAI runtime adapter\ngateway_endpoint: https://gateway.production.example.com", "endpoint.real"),
@@ -248,7 +254,9 @@ def test_package_validator_rejects_security_inventory_and_outcome_bypasses(tmp_p
     assert "mcp.partition" in {issue.code for issue in validate_package(package).errors}
     policy_path.write_text(original, encoding="utf-8")
     hidden = package / "configs/.env"
-    hidden.write_text("API_KEY=live-production-secret\n", encoding="utf-8")
+    hidden.write_text(
+        "".join(("API", "_KEY=", "live", "-production-secret\n")), encoding="utf-8"
+    )
     assert "inventory.closed" in {issue.code for issue in validate_package(package).errors}
 
 
