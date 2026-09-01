@@ -19,7 +19,7 @@ test = [
 ]
 detection = [
   "pySigma==1.4.0",
-  "pySigma-backend-elasticsearch==2.1.0",
+  "pySigma-backend-elasticsearch==2.1.1",
   "pySigma-pipeline-sysmon==2.0.0",
   "yara-python==4.5.4",
 ]
